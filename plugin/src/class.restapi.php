@@ -60,7 +60,8 @@ class Rest {
 			'post_type'     => 'results',
 		);
 
-		wp_insert_post( $domain );
+		// Store the results.
+		wp_insert_post( $results );
 
 		// Create the response object.
 		$response = new WP_REST_Response( array( 'success' => true ) );

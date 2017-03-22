@@ -10,6 +10,7 @@ class Admin {
 	public static function instance() {
 		if ( ! self::$instance ) {
 			self::$instance = new self;
+			self::$instance->init();
 		}
 		return self::$instance;
 	}
@@ -32,7 +33,7 @@ class Admin {
 				 'name' => __( 'Test Results' ),
 				 'singular_name' => __( 'Test Result' ),
 			 ),
-			 'public' => false,
+			 'public' => true,
 			 )
 		 );
 	 }
