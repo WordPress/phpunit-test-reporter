@@ -45,8 +45,10 @@ definitions:
       - results
     properties:
       commit:
+        description: The commit revision.
         type: string
       results:
+        description: The phpunit results in JSON format.
         type: string
   Response:
     type: object
