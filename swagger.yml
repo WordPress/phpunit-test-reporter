@@ -1,0 +1,84 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: WP Unit Test API.
+  description: |
+    #### An API to collect unit test results.
+schemes:
+  - http
+  - https
+basePath: /wp-json/wp-unit-test-api/v1
+host: localhost:8087
+paths:
+  /results:
+    post:
+      description: Creates a new results post.
+      operationId: addResults
+      parameters:
+        - name: results
+          in: body
+          description: Results to submit.
+          required: true
+          schema:
+            $ref: '#/definitions/newResult'
+      responses:
+        200:
+         description: Results created.
+         schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: An object describing the error.
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: The request was unauthorized.
+          schema:
+            $ref: '#/definitions/Error'
+      produces:
+        - application/json
+definitions:
+  newResult:
+    type: object
+    required:
+      - commit
+      - results
+    properties:
+      commit:
+        type: string
+      results:
+        type: string
+  Response:
+    type: object
+    properties:
+      success:
+        type: boolean
+  Error:
+    type: object
+    required:
+      - message
+      - code
+    properties:
+      message:
+        type: string
+        description: A message regarding the error that occurred on the server.
+      code:
+        type: string
+        description: A human readable code such as 'cannot_be_empty' relating to the error that occurred with the field and resource.
+      data:
+        type: array
+        description: An array containing additional information about the error.
+        items:
+          - $ref: '#/definitions/ErrorData'
+  ErrorData:
+    type: object
+    required:
+      - key
+      - value
+    properties:
+      key:
+        type: string
+        description: The key for the data.
+      value:
+        type: string
+        description: The data.
