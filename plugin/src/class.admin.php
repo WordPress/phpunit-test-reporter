@@ -34,6 +34,9 @@ class Admin {
 				 'singular_name' => __( 'Test Result' ),
 			 ),
 			 'public' => true,
+			 'has_archive' => true,
+			 'show_in_rest' => true,
+			 'supports' => array( 'title', 'editor', 'author' ),
 			 )
 		 );
 	 }

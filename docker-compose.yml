@@ -12,6 +12,7 @@ services:
       - 8087:80
     volumes:
       - ./plugin:/var/www/html/wp-content/plugins/wp-unit-test-api
+      - ./theme:/var/www/html/wp-content/themes/wp-unit-test-api
     environment:
       WORDPRESS_DB_PASSWORD: password
   db:
