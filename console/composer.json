@@ -1,0 +1,15 @@
+{
+    "name": "wpunittestapi/console",
+    "description": "",
+    "require": {
+        "php": ">=5.5",
+        "symfony/console": "^3.2",
+        "symfony/process": "^3.2",
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+			"psr-4": {
+				"WPUnitTestAPI\\Commands\\": "src/WPUnitTestAPI/Commands/"
+			}
+    }
+}

@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+// Set to run indefinitely if needed.
+set_time_limit(0);
+
+// Include the composer autoloader.
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use WPUnitTestAPI\Commands\RunCommand;
+
+$app = new Application();
+$app->add(new RunCommand());
+$app->run();
+?>
