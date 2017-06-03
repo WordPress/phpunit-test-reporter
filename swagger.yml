@@ -6,10 +6,9 @@ info:
   description: |
     #### An API to collect unit test results.
 schemes:
-  - http
   - https
 basePath: /wp-json/wp-unit-test-api/v1
-host: localhost:8087
+host: wpunittestapi.wpengine.com
 paths:
   /results:
     post:
