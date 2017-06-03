@@ -12,6 +12,5 @@ docker run --rm  -v ${PWD}:/local swaggerapi/swagger-codegen-cli generate \
     -o /local/build/php
 
 # Push the new client.
-pushd build/php/WP-Unit-Test-API-Client-PHP/
+cd build/php/WP-Unit-Test-API-Client-PHP/
 bash git_push.sh octalmage WP-Unit-Test-API-Client-PHP
-popd
