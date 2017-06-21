@@ -1,6 +1,6 @@
 {
 	"composerProjectName": "wp-unit-test-api",
-	"invokerPackage": "octalmage\\wp-unit-test-api",
+	"invokerPackage": "octalmage\\WPUnitTestApi",
 	"composerVendorName": "octalmage",
 	"gitUserId": "octalmage",
 	"gitRepoId": "wp-unit-test-api",
