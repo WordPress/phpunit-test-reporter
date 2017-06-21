@@ -3,6 +3,6 @@
 	"invokerPackage": "octalmage\\WPUnitTestApi",
 	"composerVendorName": "octalmage",
 	"gitUserId": "octalmage",
-	"gitRepoId": "wp-unit-test-api",
+	"gitRepoId": "WP-Unit-Test-API-Client-PHP",
 	"packagePath": "WP-Unit-Test-API-Client-PHP"
 }
