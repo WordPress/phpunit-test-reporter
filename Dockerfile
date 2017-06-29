@@ -11,9 +11,6 @@ RUN apt-get update && apt-get install -qq -y php5-mysql nodejs build-essential p
 RUN pecl install xdebug && \
 		docker-php-ext-enable xdebug
 
-# Download install-wp-tests.sh, needed to set up WordPress testing environment.
-RUN curl -s https://raw.githubusercontent.com/wp-cli/wp-cli/master/templates/install-wp-tests.sh | bash /dev/stdin wordpress root password db latest true
-
 # Download wp-cli
 RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod 755 /usr/local/bin/wp
 
