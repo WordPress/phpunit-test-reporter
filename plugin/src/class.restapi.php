@@ -45,12 +45,16 @@ class Rest {
 
 	function permission() {
 		// TODO: Update this.
-		return true;
+		return current_user_can( 'edit_posts' );
 	}
 
 	function add_results_callback( $data ) {
-
 		$parameters = $data->get_params();
+		$meta = null;
+
+		if ( isset( $parameters['meta'] ) ) {
+			$meta = json_decode( $parameters['meta'], true );
+		}
 
 		$results = array(
 			'post_title'    => $parameters['commit'],
@@ -58,6 +62,7 @@ class Rest {
 			'post_status'   => 'publish',
 			'post_author'   => get_current_user_id(),
 			'post_type'     => 'results',
+			'meta_input'    => $meta,
 		);
 
 		// Store the results.

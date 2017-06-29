@@ -49,6 +49,9 @@ definitions:
       results:
         description: The phpunit results in JSON format.
         type: string
+      meta:
+        description: Metadata about the environment (in JSON);
+        type: string
   Response:
     type: object
     properties:

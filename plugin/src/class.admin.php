@@ -36,7 +36,7 @@ class Admin {
 			 'public' => true,
 			 'has_archive' => true,
 			 'show_in_rest' => true,
-			 'supports' => array( 'title', 'editor', 'author' ),
+			 'supports' => array( 'title', 'editor', 'author', 'custom-fields' ),
 			 )
 		 );
 	 }
