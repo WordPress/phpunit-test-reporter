@@ -1,12 +1,60 @@
+sudo: false
+
 language: php
-sudo: required
-services:
-- docker
-php:
-- '7.1'
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+matrix:
+  include:
+    - php: 7.1
+      env: WP_VERSION=latest
+    - php: 7.0
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=latest
+    - php: 5.6
+      env: WP_VERSION=trunk
+    - php: 5.6
+      env: WP_TRAVISCI=phpcs
+    - php: 5.3
+      env: WP_VERSION=latest
+
+before_script:
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+      if [[ ${TRAVIS_PHP_VERSION:0:2} == "5." ]]; then
+        composer global require "phpunit/phpunit=4.8.*"
+      else
+        composer global require "phpunit/phpunit=5.7.*"
+      fi
+    fi
+  - |
+    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+      composer global require wp-coding-standards/wpcs
+      phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+    fi
+
 script:
-- if [[ $TRAVIS_BRANCH == "master" ]] && [[ $TRAVIS_PULL_REQUEST == false ]]; then
-  sh generate-client.sh; fi
-env:
-  global:
-    secure: iefFavq/4O0nEFvowOo0rP5EoLAnjtf1ij5nJfswyxZEoxQFsrUhABOWn7WSHjM2YzXQxC251OZ9phcCIOzuW1sSMGWFbG+zraRMyrCvqgWQmutYEKHsvC/E5myHjktpsFofZHWfu6A77rxGMW+5VjGsoJSl5Yi+VtnR5/Ls1ZHq5SkTvI7yN23yplYUh/fXKhZjH1JicCMDsCNH5xDRxrWfYcukgbgo3nXbi/vUajHeFF7owUdMr1zAMLitf4vDwulWFcLq4ijh4mgszh3I/V9jX/L2qN9YUnOb2z5jpjpzvpYb8lPryKhT0Sqeo38Dt17EiQXRQca8qqWY5Jw+kBTC6uXYd3ztjJ390bOo4uBvmBQdZ1U2SfPEds1Gg03OK3G+tv+dOvn0mKwtdPmsdeuL+1aUAYYBHEFMh3aOg/MuMgyGzu3OHBlCjyhtVGPM/H+HW1hVSs5Y/rTOqRxhwMGKf/1rvVgO2NzaUhVWRbgaZRRoL4teOhrAP21EsJvsejWBBCrYIyID6NQwQSeQIcQSOf2iZ8HTGkXE5flecLlH8gftCzYI/NgErVg0rQB/L8ZKuPf4zqd/45npTnOj6baiGgdlN/RyOjG5Y7MHSxM0sV1JihZFFgNijwnp8IM7gdiBi2ShOlYBz97EcrJ185p4fR3/WGula0Ek1XiZJQE=
+  - |
+    if [[ ! -z "$WP_VERSION" ]] ; then
+      phpunit
+      WP_MULTISITE=1 phpunit
+    fi
+  - |
+    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
+      phpcs --standard=phpcs.ruleset.xml $(find . -name '*.php')
+    fi

@@ -1,4 +1,4 @@
-# WP Unit Test API [![Build Status](https://travis-ci.org/octalmage/wp-unit-test-api.svg?branch=master)](https://travis-ci.org/octalmage/wp-unit-test-api)
+# WP Unit Test Reporter [![Build Status](https://travis-ci.org/octalmage/wp-unit-test-api.svg?branch=master)](https://travis-ci.org/octalmage/wp-unit-test-api)
 
 ## Getting Started
 
