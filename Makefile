@@ -12,4 +12,4 @@ shell:
 	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; /bin/bash"
 
 test:
-	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; phpunit"
+	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; phpcs --standard=phpcs.ruleset.xml ./ && phpunit"

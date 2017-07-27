@@ -23,6 +23,9 @@ RUN rm -rf /usr/local/etc/php/conf.d/opcache-recommended.ini
 # Install composer.
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
-RUN composer global require "phpunit/phpunit=5.7.*"
-
 ENV PATH="/root/.composer/vendor/bin::${PATH}"
+
+RUN composer global require "phpunit/phpunit=5.7.*"
+RUN composer global require "squizlabs/php_codesniffer=2.9.*"
+RUN composer global require wp-coding-standards/wpcs
+RUN phpcs --config-set installed_paths /root/.composer/vendor/wp-coding-standards/wpcs

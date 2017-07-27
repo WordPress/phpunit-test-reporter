@@ -15,6 +15,6 @@ class SampleTest extends WP_UnitTestCase {
 	 */
 	function test_sample() {
 		// Replace this with some actual testing code.
-		$this->assertTrue( class_exists('WP_Unit_Test_Reporter') );
+		$this->assertTrue( class_exists( 'WP_Unit_Test_Reporter' ) );
 	}
 }
