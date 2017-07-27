@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WP Unit Test API
+ * Plugin Name: WP Unit Test Reporter
  * Plugin URI: http://domain.com
  * Description: Description
  * Version: 0.0.1

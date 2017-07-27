@@ -7,6 +7,9 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
 # Install server dependencies.
 RUN apt-get update && apt-get install -qq -y php5-mysql nodejs build-essential pkg-config libcairo2-dev libjpeg-dev libgif-dev git subversion mysql-client zip unzip vim libyaml-dev --fix-missing --no-install-recommends
 
+COPY bin/install-wp-tests.sh /
+RUN cat /install-wp-tests.sh | bash /dev/stdin wordpress root password mysql latest true
+
 # Setup phpunit dependencies (needed for coverage).
 RUN pecl install xdebug && \
 		docker-php-ext-enable xdebug
