@@ -1,4 +1,5 @@
 <?php
+namespace WPUTR;
 class RestAPI {
 
 	// Define and register singleton
