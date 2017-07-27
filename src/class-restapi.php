@@ -24,7 +24,8 @@ class Rest {
 	 * @action rest_api_init
 	 */
 	function register_routes() {
-		register_rest_route( 'wp-unit-test-api/v1', 'results', array(
+		register_rest_route(
+			'wp-unit-test-api/v1', 'results', array(
 				'methods' => 'POST',
 				'callback' => array( $this, 'add_results_callback' ),
 				'args' => array(
@@ -40,7 +41,8 @@ class Rest {
 					),
 				),
 				'permission_callback' => array( $this, 'permission' ),
-		) );
+			)
+		);
 	}
 
 	function permission() {
@@ -69,7 +71,11 @@ class Rest {
 		wp_insert_post( $results );
 
 		// Create the response object.
-		$response = new WP_REST_Response( array( 'success' => true ) );
+		$response = new WP_REST_Response(
+			array(
+				'success' => true,
+			)
+		);
 
 		// Add a custom status code.
 		$response->set_status( 201 );

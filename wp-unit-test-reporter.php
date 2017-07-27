@@ -11,15 +11,17 @@
  * @package WP_Unit_Test_API
  * @category Core
  */
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 /**
  * Main wp-unit-test-reporter Class
  *
  * @class WP_Unit_Test_Reporter
- * @version	1.0.0
+ * @version 1.0.0
  * @since 1.0.0
- * @package	WP_Unit_Test_Reporter
+ * @package WP_Unit_Test_Reporter
  */
 final class WP_Unit_Test_Reporter {
 	// Define and register singleton
@@ -33,14 +35,15 @@ final class WP_Unit_Test_Reporter {
 
 	/**
 	 * Constructor function.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 */
-	public function __construct () {
+	public function __construct() {
 		// RestAPI.
-		require_once( 'src/class.restapi.php' );
+		require_once( 'src/class-restapi.php' );
 		// Admin.
-		require_once( 'src/class.admin.php' );
+		require_once( 'src/class-admin.php' );
 
 	} // End __construct()
 
