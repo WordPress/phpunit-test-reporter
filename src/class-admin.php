@@ -1,4 +1,5 @@
 <?php
+namespace WPUnitTestReporter;
 class Admin {
 
 	/**
