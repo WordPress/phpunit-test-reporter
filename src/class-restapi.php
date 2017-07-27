@@ -1,5 +1,5 @@
 <?php
-class Rest {
+class RestAPI {
 
 	// Define and register singleton
 	private static $instance = false;
@@ -86,4 +86,4 @@ class Rest {
 	}
 }
 
-Rest::instance();
+RestAPI::instance();
