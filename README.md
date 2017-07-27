@@ -9,6 +9,8 @@
 	```
 1. Then open the WordPress install:
 
-	http://localhost:8087
+	http://localhost:8080
 
 You'll then need to install WordPress and activate the plugin.
+
+You can shell into the container using `make shell`.

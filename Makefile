@@ -9,4 +9,4 @@ stop:
 
 # One liner to get a shell inside the WordPress container.
 shell:
-	docker-compose exec wordpress /bin/bash
+	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-api/; /bin/bash"
