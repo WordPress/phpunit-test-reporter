@@ -69,7 +69,7 @@ class RestAPI {
 		$env = null;
 
 		if ( isset( $parameters['meta'] ) ) {
-			$env = json_decode( $parameters['meta'], true );
+			$env = $parameters['meta'];
 		}
 
 		$meta = array(
