@@ -32,12 +32,22 @@ class RestAPI {
 				'args' => array(
 					'commit' => array(
 						'required' => true,
-						'description' => 'The SVN Commit SHA.',
+						'description' => 'The SVN commit SHA.',
 						'type' => 'string',
 					),
 					'results' => array(
 						'required' => true,
 						'description' => 'phpunit results in JSON format.',
+						'type' => 'string',
+					),
+					'message' => array(
+						'required' => true,
+						'description' => 'The SVN commit message.',
+						'type' => 'string',
+					),
+					'meta' => array(
+						'required' => true,
+						'description' => 'JSON blob containing information about the environment.',
 						'type' => 'string',
 					),
 				),
@@ -77,11 +87,13 @@ class RestAPI {
 			'env' => $env,
 		);
 
+		$current_user = wp_get_current_user();
+
 		$results = array(
-			'post_title' => 'Test results for revision: ' . $parameters['commit'],
+			'post_title' => $current_user->user_login . ' - ' . $slug,
 			'post_content' => '',
 			'post_status' => 'publish',
-			'post_author' => get_current_user_id(),
+			'post_author' => $current_user->ID,
 			'post_type' => 'results',
 			'meta_input' => $meta,
 			'post_parent' => $parent_id,
