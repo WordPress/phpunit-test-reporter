@@ -1,4 +1,5 @@
 <?php
+namespace WPUTR;
 class RestAPI {
 
 	// Define and register singleton
@@ -31,12 +32,22 @@ class RestAPI {
 				'args' => array(
 					'commit' => array(
 						'required' => true,
-						'description' => 'The SVN Commit SHA.',
+						'description' => 'The SVN commit SHA.',
 						'type' => 'string',
 					),
 					'results' => array(
 						'required' => true,
 						'description' => 'phpunit results in JSON format.',
+						'type' => 'string',
+					),
+					'message' => array(
+						'required' => true,
+						'description' => 'The SVN commit message.',
+						'type' => 'string',
+					),
+					'meta' => array(
+						'required' => true,
+						'description' => 'JSON blob containing information about the environment.',
 						'type' => 'string',
 					),
 				),
@@ -52,26 +63,47 @@ class RestAPI {
 
 	function add_results_callback( $data ) {
 		$parameters = $data->get_params();
-		$meta = null;
 
-		if ( isset( $parameters['meta'] ) ) {
-			$meta = json_decode( $parameters['meta'], true );
+		$slug = 'r' . $parameters['commit'];
+		if ( $post = get_page_by_path( $slug, 'OBJECT', 'results' ) ) {
+			$parent_id = $post->ID;
+		} else {
+			$parent_id = wp_insert_post( array(
+				'post_title' => $parameters['message'],
+				'post_name' => $slug,
+				'post_status' => 'publish',
+				'post_type' => 'results',
+			) );
 		}
 
+		$env = null;
+
+		if ( isset( $parameters['meta'] ) ) {
+			$env = $parameters['meta'];
+		}
+
+		$meta = array(
+			'results' => $parameters['results'],
+			'env' => $env,
+		);
+
+		$current_user = wp_get_current_user();
+
 		$results = array(
-			'post_title'    => $parameters['commit'],
-			'post_content'  => $parameters['results'],
-			'post_status'   => 'publish',
-			'post_author'   => get_current_user_id(),
-			'post_type'     => 'results',
-			'meta_input'    => $meta,
+			'post_title' => $current_user->user_login . ' - ' . $slug,
+			'post_content' => '',
+			'post_status' => 'publish',
+			'post_author' => $current_user->ID,
+			'post_type' => 'results',
+			'meta_input' => $meta,
+			'post_parent' => $parent_id,
 		);
 
 		// Store the results.
 		wp_insert_post( $results );
 
 		// Create the response object.
-		$response = new WP_REST_Response(
+		$response = new \WP_REST_Response(
 			array(
 				'success' => true,
 			)

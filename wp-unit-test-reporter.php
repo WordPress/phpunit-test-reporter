@@ -1,5 +1,5 @@
 <?php
-namespace WPUnitTestReporter;
+namespace WPUTR;
 /**
  * Plugin Name: WP Unit Test Reporter
  * Plugin URI: http://domain.com

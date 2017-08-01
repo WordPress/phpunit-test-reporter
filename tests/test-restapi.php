@@ -30,6 +30,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$request->set_body_params( array(
 			'results' => 'test',
 			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'meta' => json_encode( array( 'php_version' => '7.1' ) ),
 		) );
 
 		$response = $this->server->dispatch( $request );
@@ -37,12 +39,19 @@ class TestRestAPI extends WP_UnitTestCase {
 
 		$this->assertTrue( $data['success'] );
 
-		$posts = get_posts( array(
-			'posts_per_page' => -1,
-			'post_type'      => 'results',
-		) );
+		$parent = get_page_by_path( 'r1234', 'OBJECT', 'results' );
 
-		$this->assertEquals( 1, count( $posts ) );
+		$this->assertEquals( 'Docs: Did something', $parent->post_title );
+
+		$args = array(
+			'post_parent' => $parent->ID,
+			'post_type'   => 'results',
+			'numberposts' => -1,
+		);
+
+		$results = get_children( $args );
+
+		$this->assertEquals( 1, count( $results ) );
 	 }
 
 	public function tearDown() {
