@@ -112,8 +112,16 @@ class Shortcode {
 							if ( $user ) {
 								$host = $user->display_name;
 							}
-							$php_version = 'PHP 5.6';
-							$mysql_version = 'MySQL 1234';
+							$php_version = 'Unknown';
+							$mysql_version = 'Unknown';
+							$env = get_post_meta( $report->ID, 'env', true );
+							if ( ! empty( $env['php_version'] ) ) {
+								$php_version = 'PHP ' . $env['php_version'];
+							}
+							if ( ! empty( $env['mysql_version'] ) ) {
+								$bits = explode( ',', $env['mysql_version'] );
+								$mysql_version = $bits[0];
+							}
 							?>
 						<tr>
 							<td></td>
