@@ -2,6 +2,8 @@
 
 namespace WPUTR;
 
+use WP_Query;
+
 class Shortcode {
 
 	/**
@@ -16,7 +18,25 @@ class Shortcode {
 	 */
 	public static function render_results( $atts ) {
 
-		ob_start(); ?>
+		// Shortcodes must return, not echo.
+		// But, echo'ing is easier than concatenating strings.
+		ob_start();
+
+		echo '<h3>PHPUnit Test Results</h3>' . PHP_EOL;
+
+		$query_args = array(
+			'posts_per_page'   => 10,
+			'post_type'        => 'result',
+			'post_parent'      => 0,
+			'orderby'          => 'post_name',
+			'order'            => 'DESC',
+		);
+		$rev_query = new WP_Query( $query_args );
+		if ( empty( $rev_query->posts ) ) {
+			echo '<p>No revisions found</p>';
+			return ob_get_clean();
+		}
+		?>
 		<style>
 			.wputr-status-badge {
 				color: #FFF;
@@ -38,7 +58,6 @@ class Shortcode {
 				background-color: #909090;
 			}
 		</style>
-		<h3>PHPUnit Test Results</h3>
 		<table>
 			<thead>
 				<tr>
@@ -51,66 +70,51 @@ class Shortcode {
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th><a href="https://core.trac.wordpress.org/changeset/41176/">41176</a></th>
-					<th><a href="#" class="wputr-status-badge wputr-status-badge-passed">Passed</a></th>
-					<th colspan="4">REST API: Add some missing assertions to various REST API tests. See …</th>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-passed">Passed</a></td>
-					<td>DreamHost</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-passed">Passed</a></td>
-					<td>Pantheon</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-passed">Passed</a></td>
-					<td>WP Engine</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
-				<tr>
-					<th><a href="#">41174</a></th>
-					<th><a href="#" class="wputr-status-badge wputr-status-badge-failed">Failed</a></th>
-					<th colspan="4">General: Avoid counting uncountable values when reading theme directories, …</th>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-failed">Failed</a></td>
-					<td>DreamHost</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-errored">Errored</a></td>
-					<td>Pantheon</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><a href="#" class="wputr-status-badge wputr-status-badge-failed">Failed</a></td>
-					<td>WP Engine</td>
-					<td>PHP 5.6</td>
-					<td>Imagick, pcre</td>
-					<td>MySQl 1234</td>
-				</tr>
+				<?php
+				$total_cols = 6;
+				foreach( $rev_query->posts as $revision ) :
+					$rev_id = (int) $revision->post_name;
+				?>
+					<tr>
+						<th><a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>"><?php echo (int) $rev_id; ?></a></th>
+						<th colspan="<?php echo (int) $total_cols - 1; ?>"><?php echo wp_kses_post( apply_filters( 'the_title', $revision->post_title ) ); ?></th>
+					</tr>
+					<?php
+					$query_args = array(
+						'posts_per_page'   => 10,
+						'post_type'        => 'result',
+						'post_parent'      => $rev_id,
+						'orderby'          => 'post_title',
+						'order'            => 'ASC',
+					);
+					$report_query = new WP_Query( $query_args );
+					if ( ! empty( $report_query->posts ) ) :
+						foreach( $report_query->posts as $report ) :
+							$status = 'Passed';
+							$host = 'DreamHost';
+							$php_version = 'PHP 5.6';
+							$mysql_version = 'MySQL 1234';
+							?>
+						<tr>
+							<td></td>
+							<td><a href="#" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
+							<td><?php echo esc_html( $host ); ?></td>
+							<td><?php echo esc_html( $php_version ); ?></td>
+							<td>Imagick, pcre</td>
+							<td><?php echo esc_html( $mysql_version ); ?></td>
+						</tr>
+					<?php
+						endforeach;
+					else : ?>
+						<tr>
+							<td></td>
+							<td colspan="<?php echo (int) $total_cols - 1; ?>">
+								No reports for changeset.
+							</td>
+						</tr>
+					<?php endif; ?>
+				<?php endforeach; ?>
 			</tbody>
-
 		</table>
 		<?php
 		return ob_get_clean();
