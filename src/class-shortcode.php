@@ -89,7 +89,7 @@ class Shortcode {
 				<?php
 				$total_cols = 6;
 				foreach( $rev_query->posts as $revision ) :
-					$rev_id = (int) $revision->post_name;
+					$rev_id = (int) ltrim( $revision->post_name, 'r' );
 				?>
 					<tr>
 						<th><a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>"><?php echo (int) $rev_id; ?></a></th>
