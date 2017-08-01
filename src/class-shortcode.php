@@ -107,7 +107,11 @@ class Shortcode {
 					if ( ! empty( $report_query->posts ) ) :
 						foreach( $report_query->posts as $report ) :
 							$status = 'Passed';
-							$host = 'DreamHost';
+							$host = 'Unknown';
+							$user = get_user_by( 'id', $report->post_author );
+							if ( $user ) {
+								$host = $user->display_name;
+							}
 							$php_version = 'PHP 5.6';
 							$mysql_version = 'MySQL 1234';
 							?>
