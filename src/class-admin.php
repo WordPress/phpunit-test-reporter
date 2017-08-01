@@ -1,5 +1,5 @@
 <?php
-namespace WPUnitTestReporter;
+namespace WPUTR;
 class Admin {
 
 	/**
@@ -38,7 +38,8 @@ class Admin {
 				 'public' => true,
 				 'has_archive' => true,
 				 'show_in_rest' => true,
-				 'supports' => array( 'title', 'editor', 'author', 'custom-fields' ),
+				 'hierarchical' => true,
+				 'supports' => array( 'title', 'editor', 'author', 'custom-fields', 'page-attributes' ),
 			 )
 		 );
 	}
