@@ -81,15 +81,15 @@ class Shortcode {
 					<th style="width:100px">Status</th>
 					<th>Host</th>
 					<th>PHP Version</th>
-					<th>PHP Extensions</th>
 					<th>Database Version</th>
+					<th>Extensions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
 				$total_cols = 6;
 				foreach( $rev_query->posts as $revision ) :
-					$rev_id = (int) $revision->post_name;
+					$rev_id = (int) ltrim( $revision->post_name, 'r' );
 				?>
 					<tr>
 						<th><a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>"><?php echo (int) $rev_id; ?></a></th>
@@ -107,17 +107,45 @@ class Shortcode {
 					if ( ! empty( $report_query->posts ) ) :
 						foreach( $report_query->posts as $report ) :
 							$status = 'Passed';
-							$host = 'DreamHost';
-							$php_version = 'PHP 5.6';
-							$mysql_version = 'MySQL 1234';
+							$host = 'Unknown';
+							$user = get_user_by( 'id', $report->post_author );
+							if ( $user ) {
+								$host = $user->display_name;
+							}
+							$php_version = 'Unknown';
+							$extensions = array();
+							$mysql_version = 'Unknown';
+							$env = get_post_meta( $report->ID, 'env', true );
+							if ( ! empty( $env['php_version'] ) ) {
+								$php_version = 'PHP ' . $env['php_version'];
+							}
+							if ( ! empty( $env['mysql_version'] ) ) {
+								$bits = explode( ',', $env['mysql_version'] );
+								$mysql_version = $bits[0];
+							}
+							if ( ! empty( $env['php_modules'] ) ) {
+								foreach( $env['php_modules'] as $module => $version ) {
+									if ( ! empty( $version ) ) {
+										$extensions[] = $module . ' (' . $version . ')';
+									}
+								}
+							}
+							if ( ! empty( $env['system_utils'] ) ) {
+								foreach( $env['system_utils'] as $module => $version ) {
+									if ( ! empty( $version ) ) {
+										$extensions[] = $module . ' (' . $version . ')';
+									}
+								}
+							}
+							$extensions = implode( ', ', $extensions );
 							?>
 						<tr>
 							<td></td>
 							<td><a href="#" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
 							<td><?php echo esc_html( $php_version ); ?></td>
-							<td>Imagick, pcre</td>
 							<td><?php echo esc_html( $mysql_version ); ?></td>
+							<td><?php echo esc_html( $extensions ); ?></td>
 						</tr>
 					<?php
 						endforeach;
