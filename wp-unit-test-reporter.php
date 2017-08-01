@@ -45,6 +45,7 @@ final class WP_Unit_Test_Reporter {
 		require_once( 'src/class-restapi.php' );
 		// Admin.
 		require_once( 'src/class-admin.php' );
+		require_once( 'src/class-shortcode.php' );
 
 	} // End __construct()
 
