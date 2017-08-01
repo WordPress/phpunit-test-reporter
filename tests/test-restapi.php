@@ -39,13 +39,13 @@ class TestRestAPI extends WP_UnitTestCase {
 
 		$this->assertTrue( $data['success'] );
 
-		$parent = get_page_by_path( 'r1234', 'OBJECT', 'results' );
+		$parent = get_page_by_path( 'r1234', 'OBJECT', 'result' );
 
 		$this->assertEquals( 'Docs: Did something', $parent->post_title );
 
 		$args = array(
 			'post_parent' => $parent->ID,
-			'post_type'   => 'results',
+			'post_type'   => 'result',
 			'numberposts' => -1,
 		);
 

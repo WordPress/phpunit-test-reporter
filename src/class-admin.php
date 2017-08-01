@@ -29,7 +29,7 @@ class Admin {
 	 */
 	public function create_custom_post_type() {
 		 register_post_type(
-			 'results',
+			 'result',
 			 array(
 				 'labels' => array(
 					 'name' => __( 'Test Results' ),
