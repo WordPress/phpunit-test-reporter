@@ -81,8 +81,8 @@ class Shortcode {
 					<th style="width:100px">Status</th>
 					<th>Host</th>
 					<th>PHP Version</th>
-					<th>PHP Extensions</th>
 					<th>Database Version</th>
+					<th>Extensions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -113,6 +113,7 @@ class Shortcode {
 								$host = $user->display_name;
 							}
 							$php_version = 'Unknown';
+							$extensions = array();
 							$mysql_version = 'Unknown';
 							$env = get_post_meta( $report->ID, 'env', true );
 							if ( ! empty( $env['php_version'] ) ) {
@@ -122,14 +123,29 @@ class Shortcode {
 								$bits = explode( ',', $env['mysql_version'] );
 								$mysql_version = $bits[0];
 							}
+							if ( ! empty( $env['php_modules'] ) ) {
+								foreach( $env['php_modules'] as $module => $version ) {
+									if ( ! empty( $version ) ) {
+										$extensions[] = $module . ' (' . $version . ')';
+									}
+								}
+							}
+							if ( ! empty( $env['system_utils'] ) ) {
+								foreach( $env['system_utils'] as $module => $version ) {
+									if ( ! empty( $version ) ) {
+										$extensions[] = $module . ' (' . $version . ')';
+									}
+								}
+							}
+							$extensions = implode( ', ', $extensions );
 							?>
 						<tr>
 							<td></td>
 							<td><a href="#" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
 							<td><?php echo esc_html( $php_version ); ?></td>
-							<td>Imagick, pcre</td>
 							<td><?php echo esc_html( $mysql_version ); ?></td>
+							<td><?php echo esc_html( $extensions ); ?></td>
 						</tr>
 					<?php
 						endforeach;
