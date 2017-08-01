@@ -25,12 +25,16 @@ class Shortcode {
 		echo '<h3>PHPUnit Test Results</h3>' . PHP_EOL;
 
 		$query_args = array(
-			'posts_per_page'   => 10,
+			'posts_per_page'   => 5,
 			'post_type'        => 'result',
 			'post_parent'      => 0,
 			'orderby'          => 'post_name',
 			'order'            => 'DESC',
 		);
+		$paged = get_query_var( 'paged' );
+		if ( $paged ) {
+			$query_args['paged'] = $paged;
+		}
 		$rev_query = new WP_Query( $query_args );
 		if ( empty( $rev_query->posts ) ) {
 			echo '<p>No revisions found</p>';
@@ -56,6 +60,18 @@ class Shortcode {
 			}
 			.wputr-status-badge-errored {
 				background-color: #909090;
+			}
+			.pagination-centered {
+				text-align: center;
+			}
+			.pagination-centered ul.pagination {
+				list-style-type: none;
+			}
+			.pagination-centered ul.pagination li {
+				display: inline-block;
+			}
+			.pagination-centered ul.pagination li a {
+				cursor: pointer;
 			}
 		</style>
 		<table>
@@ -117,7 +133,55 @@ class Shortcode {
 			</tbody>
 		</table>
 		<?php
+		self::pagination( $rev_query );
 		return ob_get_clean();
+	}
+
+	private static function pagination( $query ) {
+		$bignum = 999999999;
+		$base_link = str_replace( $bignum, '%#%', esc_url( get_pagenum_link( $bignum ) ) );
+		$max_num_pages = $query->max_num_pages;
+		$current_page = max( 1, $query->get( 'paged' ) );
+		$prev_page_label = '&lsaquo;';
+		$next_page_label = '&rsaquo;';
+		$args = array(
+			'base'          => $base_link,
+			'format'        => '',
+			'current'       => $current_page,
+			'total'         => $max_num_pages,
+			'prev_text'     => $prev_page_label,
+			'next_text'     => $next_page_label,
+			'type'          => 'array',
+			'end_size'      => 1,
+			'mid_size'      => 2
+		);
+
+		if ( $max_num_pages <= 1 ) {
+			return;
+		}
+
+		$pagination_links = paginate_links( $args );
+
+		if ( ! empty( $pagination_links ) ) {
+
+			if ( 1 === $current_page ) {
+				array_unshift( $pagination_links, '<span class="prev page-numbers">' . esc_html( $prev_page_label ) . '</span>' );
+			} else if ( $current_page >= $max_num_pages ) {
+				array_push( $pagination_links, '<span class="next page-numbers">' . esc_html( $next_page_label ) . '</span>' );
+			}
+
+			echo '<nav class="pagination-centered">';
+
+				echo '<ul class="pagination">';
+				foreach ( $pagination_links as $paginated_link ) {
+					// $paginated_link contains arbitrary HTML
+					echo '<li>' . $paginated_link . '</li>';
+				}
+				echo '</ul>';
+
+			echo '</nav>';
+		}
+
 	}
 
 }
