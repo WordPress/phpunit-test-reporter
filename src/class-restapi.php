@@ -65,14 +65,14 @@ class RestAPI {
 		$parameters = $data->get_params();
 
 		$slug = 'r' . $parameters['commit'];
-		if ( $post = get_page_by_path( $slug, 'OBJECT', 'results' ) ) {
+		if ( $post = get_page_by_path( $slug, 'OBJECT', 'result' ) ) {
 			$parent_id = $post->ID;
 		} else {
 			$parent_id = wp_insert_post( array(
 				'post_title' => $parameters['message'],
 				'post_name' => $slug,
 				'post_status' => 'publish',
-				'post_type' => 'results',
+				'post_type' => 'result',
 			) );
 		}
 
@@ -94,7 +94,7 @@ class RestAPI {
 			'post_content' => '',
 			'post_status' => 'publish',
 			'post_author' => $current_user->ID,
-			'post_type' => 'results',
+			'post_type' => 'result',
 			'meta_input' => $meta,
 			'post_parent' => $parent_id,
 		);
