@@ -99,7 +99,7 @@ class Shortcode {
 					$query_args = array(
 						'posts_per_page'   => 10,
 						'post_type'        => 'result',
-						'post_parent'      => $revision->post_name,
+						'post_parent'      => $revision->ID,
 						'orderby'          => 'post_title',
 						'order'            => 'ASC',
 					);
