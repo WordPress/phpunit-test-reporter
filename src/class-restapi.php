@@ -85,7 +85,7 @@ class RestAPI {
 			'author' => $current_user->ID,
 		);
 
-		// Check to see if the test results already exist.
+		// Check to see if the test result already exist.
 		if ( $results = get_posts( $args ) ) {
 			$post_id = $results[0]->ID;
 		} else {

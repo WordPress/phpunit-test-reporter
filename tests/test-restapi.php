@@ -89,7 +89,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		) );
 
 		$response = $this->server->dispatch( $request );
-		$post_id = $response->get_data()['id'];
+		$data = $response->get_data();
+		$post_id = $data['id'];
 
 		$results = get_post_meta( $post_id, 'results', true );
 		$this->assertEquals( array( 'failures' => '1' ), $results );
