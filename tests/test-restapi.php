@@ -38,7 +38,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
 
-		$this->assertTrue( $data['success'] );
+		$this->assertTrue( isset( $data['id'] ) );
+		$this->assertTrue( isset( $data['link'] ) );
 
 		$parent = get_page_by_path( 'r1234', 'OBJECT', 'result' );
 

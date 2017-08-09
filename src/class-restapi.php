@@ -88,7 +88,10 @@ class RestAPI {
 		);
 
 		// Store the results.
-		$post_id = wp_insert_post( $results );
+		$post_id = wp_insert_post( $results, true );
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
 
 		$env = isset( $parameters['meta'] ) ? json_decode( $parameters['meta'], true ) : array();
 		$results = isset( $parameters['results'] ) ? json_decode( $parameters['results'], true ) : array();
@@ -99,8 +102,8 @@ class RestAPI {
 		// Create the response object.
 		$response = new \WP_REST_Response(
 			array(
-				'success' => true,
-				'id' => $post_id,
+				'id'    => $post_id,
+				'link'  => get_permalink( $post_id )
 			)
 		);
 
