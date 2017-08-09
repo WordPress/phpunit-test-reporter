@@ -42,7 +42,7 @@ class Shortcode {
 		}
 		?>
 		<style>
-			.wputr-status-badge {
+			a.wputr-status-badge {
 				color: #FFF;
 				display: inline-block;
 				padding-left: 8px;
@@ -52,13 +52,13 @@ class Shortcode {
 				border-radius: 3px;
 				font-weight: normal;
 			}
-			.wputr-status-badge-passed {
+			a.wputr-status-badge-passed {
 				background-color: #39BC00;
 			}
-			.wputr-status-badge-failed {
+			a.wputr-status-badge-failed {
 				background-color: #CD543A;
 			}
-			.wputr-status-badge-errored {
+			a.wputr-status-badge-errored {
 				background-color: #909090;
 			}
 			.pagination-centered {
@@ -106,7 +106,13 @@ class Shortcode {
 					$report_query = new WP_Query( $query_args );
 					if ( ! empty( $report_query->posts ) ) :
 						foreach( $report_query->posts as $report ) :
-							$status = 'Passed';
+							$status = 'Errored';
+							$status_title = 'No results found for test.';
+							$results = get_post_meta( $report->ID, 'results', true );
+							if ( isset( $results['failures'] ) ) {
+								$status = 0 === (int) $results['failures'] && 0 === (int) $results['errors'] ? 'Passed' : 'Failed';
+								$status_title = (int) $results['tests'] . ' tests, ' . (int) $results['failures'] . ' failed, ' . (int) $results['errors'] . ' errors';
+							}
 							$host = 'Unknown';
 							$user = get_user_by( 'id', $report->post_author );
 							if ( $user ) {
@@ -141,7 +147,7 @@ class Shortcode {
 							?>
 						<tr>
 							<td></td>
-							<td><a href="#" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
+							<td><a href="#" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
 							<td><?php echo esc_html( $php_version ); ?></td>
 							<td><?php echo esc_html( $mysql_version ); ?></td>
