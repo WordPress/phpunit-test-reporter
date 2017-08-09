@@ -78,17 +78,30 @@ class RestAPI {
 
 		$current_user = wp_get_current_user();
 
-		$results = array(
-			'post_title' => $current_user->user_login . ' - ' . $slug,
-			'post_content' => '',
-			'post_status' => 'publish',
-			'post_author' => $current_user->ID,
-			'post_type' => 'result',
+		$args = array(
 			'post_parent' => $parent_id,
+			'post_type' => 'result',
+			'numberposts' => 1,
+			'author' => $current_user->ID,
 		);
 
-		// Store the results.
-		$post_id = wp_insert_post( $results, true );
+		// Check to see if the test result already exist.
+		if ( $results = get_posts( $args ) ) {
+			$post_id = $results[0]->ID;
+		} else {
+			$results = array(
+				'post_title' => $current_user->user_login . ' - ' . $slug,
+				'post_content' => '',
+				'post_status' => 'publish',
+				'post_author' => $current_user->ID,
+				'post_type' => 'result',
+				'post_parent' => $parent_id,
+			);
+
+			// Store the results.
+			$post_id = wp_insert_post( $results, true );
+		}
+
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id;
 		}

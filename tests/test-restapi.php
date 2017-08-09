@@ -78,6 +78,37 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals( array( 'failures' => '5' ), $results );
 	}
 
+	public function test_add_result_updates_existing_results() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+
+		$request->set_body_params( array(
+			'results' => '{"failures": "1"}',
+			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'meta' => '',
+		) );
+
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+		$post_id = $data['id'];
+
+		$results = get_post_meta( $post_id, 'results', true );
+		$this->assertEquals( array( 'failures' => '1' ), $results );
+
+		// Make second request.
+		$request->set_body_params( array(
+			'results' => '{"failures": "0"}',
+			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'meta' => '',
+		) );
+
+		$this->server->dispatch( $request );
+
+		$results = get_post_meta( $post_id, 'results', true );
+		$this->assertEquals( array( 'failures' => '0' ), $results );
+	}
+
 	public function tearDown() {
 		parent::tearDown();
 		global $wp_rest_server;
