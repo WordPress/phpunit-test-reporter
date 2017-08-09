@@ -20,11 +20,12 @@ class TestRestAPI extends WP_UnitTestCase {
 			array( 'role' => 'administrator' )
 		);
 
+		wp_set_current_user( $this->administrator );
+
 		do_action( 'rest_api_init' );
 	 }
 
 	public function test_add_result() {
-		wp_set_current_user( $this->administrator );
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
 		$request->set_body_params( array(
@@ -52,7 +53,29 @@ class TestRestAPI extends WP_UnitTestCase {
 		$results = get_children( $args );
 
 		$this->assertEquals( 1, count( $results ) );
-	 }
+	}
+
+	public function test_add_result_saves_post_meta() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+
+		$request->set_body_params( array(
+			'results' => '{"failures": "5"}',
+			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'meta' => json_encode( array( 'php_version' => '7.1' ) ),
+		) );
+
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+
+		$post_id = $data['id'];
+
+		$env = get_post_meta( $post_id, 'env', true );
+		$results = get_post_meta( $post_id, 'results', true );
+
+		$this->assertEquals( '7.1', $env['php_version'] );
+		$this->assertEquals( array( 'failures' => '5' ), $results );
+	}
 
 	public function tearDown() {
 		parent::tearDown();

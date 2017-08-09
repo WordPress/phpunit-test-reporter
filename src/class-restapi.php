@@ -76,17 +76,6 @@ class RestAPI {
 			) );
 		}
 
-		$env = null;
-
-		if ( isset( $parameters['meta'] ) ) {
-			$env = $parameters['meta'];
-		}
-
-		$meta = array(
-			'results' => $parameters['results'],
-			'env' => $env,
-		);
-
 		$current_user = wp_get_current_user();
 
 		$results = array(
@@ -95,17 +84,23 @@ class RestAPI {
 			'post_status' => 'publish',
 			'post_author' => $current_user->ID,
 			'post_type' => 'result',
-			'meta_input' => $meta,
 			'post_parent' => $parent_id,
 		);
 
 		// Store the results.
-		wp_insert_post( $results );
+		$post_id = wp_insert_post( $results );
+
+		$env = isset( $parameters['meta'] ) ? json_decode( $parameters['meta'], true ) : array();
+		$results = isset( $parameters['results'] ) ? json_decode( $parameters['results'], true ) : array();
+
+		update_post_meta( $post_id, 'env', $env );
+		update_post_meta( $post_id, 'results', $results );
 
 		// Create the response object.
 		$response = new \WP_REST_Response(
 			array(
 				'success' => true,
+				'id' => $post_id,
 			)
 		);
 
