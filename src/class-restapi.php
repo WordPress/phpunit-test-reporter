@@ -100,12 +100,16 @@ class RestAPI {
 		);
 
 		// Store the results.
-		wp_insert_post( $results );
+		$post_id = wp_insert_post( $results, true );
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
 
 		// Create the response object.
 		$response = new \WP_REST_Response(
 			array(
-				'success' => true,
+				'id'    => $post_id,
+				'link'  => get_permalink( $post_id )
 			)
 		);
 
