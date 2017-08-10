@@ -4,12 +4,12 @@ namespace PTR;
 
 use WP_Query;
 
-class Shortcode {
+class Display {
 
 	/**
 	 * Register the shortcode.
 	 */
-	public static function action_init_register() {
+	public static function action_init_register_shortcode() {
 		add_shortcode( 'ptr-results', array( __CLASS__, 'render_results' ) );
 	}
 
