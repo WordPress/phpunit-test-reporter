@@ -48,7 +48,8 @@ class RestAPI {
 		$parameters = $data->get_params();
 
 		$slug = 'r' . $parameters['commit'];
-		if ( $post = get_page_by_path( $slug, 'OBJECT', 'result' ) ) {
+		$post = get_page_by_path( $slug, 'OBJECT', 'result' );
+		if ( $post ) {
 			$parent_id = $post->ID;
 		} else {
 			$parent_id = wp_insert_post( array(
@@ -69,7 +70,8 @@ class RestAPI {
 		);
 
 		// Check to see if the test result already exist.
-		if ( $results = get_posts( $args ) ) {
+		$results = get_posts( $args );
+		if ( $results ) {
 			$post_id = $results[0]->ID;
 		} else {
 			$results = array(
@@ -99,7 +101,7 @@ class RestAPI {
 		$response = new \WP_REST_Response(
 			array(
 				'id'    => $post_id,
-				'link'  => get_permalink( $post_id )
+				'link'  => get_permalink( $post_id ),
 			)
 		);
 
