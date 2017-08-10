@@ -35,7 +35,7 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => 'test',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'meta' => json_encode( array(
+			'env' => json_encode( array(
 				'php_version' => '7.1',
 			) ),
 		) );
@@ -68,7 +68,7 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "5"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'meta' => json_encode( array(
+			'env' => json_encode( array(
 				'php_version' => '7.1',
 			) ),
 		) );
@@ -94,7 +94,7 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "1"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'meta' => '',
+			'env' => '',
 		) );
 
 		$response = $this->server->dispatch( $request );
@@ -111,7 +111,7 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "0"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'meta' => '',
+			'env' => '',
 		) );
 
 		$this->server->dispatch( $request );
