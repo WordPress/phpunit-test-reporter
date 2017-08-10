@@ -38,3 +38,17 @@ if ( $user ) {
 		<td><?php echo esc_html( Display::get_display_extensions( $report->ID ) ) ?></td>
 	</tr>
 </table>
+
+<?php if ( ! empty( $results['failures'] ) ) : ?>
+	<h2>Failures</h2>
+
+	<?php foreach( $results['testsuites'] as $suite_name => $testsuite ) :
+		if ( empty( $testsuite['failures'] ) ) {
+			continue;
+		}
+		foreach( $testsuite['testcases'] as $test_name => $testcase ) : ?>
+		<p><strong><?php echo esc_html( $suite_name . '::' . $test_name ); ?></strong></p>
+		<pre><?php echo $testcase['failure']; ?></pre>
+		<?php endforeach; ?>
+		<?php endforeach; ?>
+<?php endif; ?>
