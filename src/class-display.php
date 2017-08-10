@@ -143,40 +143,14 @@ class Display {
 							if ( $user ) {
 								$host = $user->display_name;
 							}
-							$php_version = 'Unknown';
-							$extensions = array();
-							$mysql_version = 'Unknown';
-							$env = get_post_meta( $report->ID, 'env', true );
-							if ( ! empty( $env['php_version'] ) ) {
-								$php_version = 'PHP ' . $env['php_version'];
-							}
-							if ( ! empty( $env['mysql_version'] ) ) {
-								$bits = explode( ',', $env['mysql_version'] );
-								$mysql_version = $bits[0];
-							}
-							if ( ! empty( $env['php_modules'] ) ) {
-								foreach( $env['php_modules'] as $module => $version ) {
-									if ( ! empty( $version ) ) {
-										$extensions[] = $module . ' (' . $version . ')';
-									}
-								}
-							}
-							if ( ! empty( $env['system_utils'] ) ) {
-								foreach( $env['system_utils'] as $module => $version ) {
-									if ( ! empty( $version ) ) {
-										$extensions[] = $module . ' (' . $version . ')';
-									}
-								}
-							}
-							$extensions = implode( ', ', $extensions );
 							?>
 						<tr>
 							<td></td>
 							<td><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
-							<td><?php echo esc_html( $php_version ); ?></td>
-							<td><?php echo esc_html( $mysql_version ); ?></td>
-							<td><?php echo esc_html( $extensions ); ?></td>
+							<td><?php echo esc_html( self::get_display_php_version( $report->ID ) ); ?></td>
+							<td><?php echo esc_html( self::get_display_mysql_version( $report->ID ) ); ?></td>
+							<td><?php echo esc_html( self::get_display_extensions( $report->ID ) ); ?></td>
 						</tr>
 					<?php
 						endforeach;
@@ -194,6 +168,63 @@ class Display {
 		<?php
 		self::pagination( $rev_query );
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get the PHP version for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_php_version( $report_id ) {
+		$php_version = 'Unknown';
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['php_version'] ) ) {
+			$php_version = 'PHP ' . $env['php_version'];
+		}
+		return $php_version;
+	}
+
+	/**
+	 * Get the database version for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_mysql_version( $report_id ) {
+		$mysql_version = 'Unknown';
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['mysql_version'] ) ) {
+			$bits = explode( ',', $env['mysql_version'] );
+			$mysql_version = $bits[0];
+		}
+		return $mysql_version;
+	}
+
+	/**
+	 * Get the extensions list for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_extensions( $report_id ) {
+		$extensions = array();
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['php_modules'] ) ) {
+			foreach( $env['php_modules'] as $module => $version ) {
+				if ( ! empty( $version ) ) {
+					$extensions[] = $module . ' (' . $version . ')';
+				}
+			}
+		}
+		if ( ! empty( $env['system_utils'] ) ) {
+			foreach( $env['system_utils'] as $module => $version ) {
+				if ( ! empty( $version ) ) {
+					$extensions[] = $module . ' (' . $version . ')';
+				}
+			}
+		}
+		return implode( ', ', $extensions );
 	}
 
 	private static function pagination( $query ) {
