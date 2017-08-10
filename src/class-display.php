@@ -32,9 +32,15 @@ class Display {
 		}
 
 		if ( get_queried_object()->post_parent ) {
-			$content = ptr_get_template_part( 'single-result', array( 'report' => get_queried_object() ) );
+			$content = ptr_get_template_part( 'single-result', array(
+				'report' => get_queried_object(),
+			) );
 		} else {
-			$content = ptr_get_template_part( 'result-set', array( 'revisions' => array( get_queried_object()) ) );
+			$content = ptr_get_template_part( 'result-set', array(
+				'revisions' => array(
+					get_queried_object(),
+				),
+			) );
 		}
 
 		return $content;
@@ -68,7 +74,9 @@ class Display {
 			return ob_get_clean();
 		}
 		echo self::get_display_css();
-		echo ptr_get_template_part( 'result-set', array( 'revisions' => $rev_query->posts ) );
+		echo ptr_get_template_part( 'result-set', array(
+			'revisions' => $rev_query->posts,
+		) );
 		self::pagination( $rev_query );
 		return ob_get_clean();
 	}
@@ -79,7 +87,8 @@ class Display {
 	 * @return string
 	 */
 	public static function get_display_css() {
-		ob_start(); ?>
+		ob_start();
+		?>
 		<style>
 			a.ptr-status-badge {
 				color: #FFF;
@@ -113,8 +122,8 @@ class Display {
 				cursor: pointer;
 			}
 		</style>
-		<?php return ob_get_clean();
-		
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -158,14 +167,14 @@ class Display {
 		$extensions = array();
 		$env = get_post_meta( $report_id, 'env', true );
 		if ( ! empty( $env['php_modules'] ) ) {
-			foreach( $env['php_modules'] as $module => $version ) {
+			foreach ( $env['php_modules'] as $module => $version ) {
 				if ( ! empty( $version ) ) {
 					$extensions[] = $module . ' (' . $version . ')';
 				}
 			}
 		}
 		if ( ! empty( $env['system_utils'] ) ) {
-			foreach( $env['system_utils'] as $module => $version ) {
+			foreach ( $env['system_utils'] as $module => $version ) {
 				if ( ! empty( $version ) ) {
 					$extensions[] = $module . ' (' . $version . ')';
 				}
@@ -190,7 +199,7 @@ class Display {
 			'next_text'     => $next_page_label,
 			'type'          => 'array',
 			'end_size'      => 1,
-			'mid_size'      => 2
+			'mid_size'      => 2,
 		);
 
 		if ( $max_num_pages <= 1 ) {
@@ -203,18 +212,18 @@ class Display {
 
 			if ( 1 === $current_page ) {
 				array_unshift( $pagination_links, '<span class="prev page-numbers">' . esc_html( $prev_page_label ) . '</span>' );
-			} else if ( $current_page >= $max_num_pages ) {
+			} elseif ( $current_page >= $max_num_pages ) {
 				array_push( $pagination_links, '<span class="next page-numbers">' . esc_html( $next_page_label ) . '</span>' );
 			}
 
 			echo '<nav class="pagination-centered">';
 
-				echo '<ul class="pagination">';
-				foreach ( $pagination_links as $paginated_link ) {
-					// $paginated_link contains arbitrary HTML
-					echo '<li>' . $paginated_link . '</li>';
-				}
-				echo '</ul>';
+			echo '<ul class="pagination">';
+			foreach ( $pagination_links as $paginated_link ) {
+				// $paginated_link contains arbitrary HTML
+				echo '<li>' . $paginated_link . '</li>';
+			}
+			echo '</ul>';
 
 			echo '</nav>';
 		}
