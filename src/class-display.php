@@ -51,12 +51,7 @@ class Display {
 	 */
 	public static function render_results( $atts ) {
 
-		// Shortcodes must return, not echo.
-		// But, echo'ing is easier than concatenating strings.
-		ob_start();
-
-		echo '<h3>PHPUnit Test Results</h3>' . PHP_EOL;
-
+		$output = '<h2>PHPUnit Test Results</h2>' . PHP_EOL . PHP_EOL;
 		$query_args = array(
 			'posts_per_page'   => 5,
 			'post_type'        => 'result',
@@ -70,15 +65,17 @@ class Display {
 		}
 		$rev_query = new WP_Query( $query_args );
 		if ( empty( $rev_query->posts ) ) {
-			echo '<p>No revisions found</p>';
-			return ob_get_clean();
+			$output .= '<p>No revisions found</p>';
+			return $output;
 		}
-		echo self::get_display_css();
-		echo ptr_get_template_part( 'result-set', array(
+		$output .= self::get_display_css();
+		$output .= ptr_get_template_part( 'result-set', array(
 			'revisions' => $rev_query->posts,
 		) );
+		ob_start();
 		self::pagination( $rev_query );
-		return ob_get_clean();
+		$output .= ob_get_clean();
+		return $output;
 	}
 
 	/**
