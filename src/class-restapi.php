@@ -28,7 +28,7 @@ class RestAPI {
 						'description' => 'The SVN commit message.',
 						'type' => 'string',
 					),
-					'meta' => array(
+					'env' => array(
 						'required' => true,
 						'description' => 'JSON blob containing information about the environment.',
 						'type' => 'string',
@@ -91,7 +91,7 @@ class RestAPI {
 			return $post_id;
 		}
 
-		$env = isset( $parameters['meta'] ) ? json_decode( $parameters['meta'], true ) : array();
+		$env = isset( $parameters['env'] ) ? json_decode( $parameters['env'], true ) : array();
 		$results = isset( $parameters['results'] ) ? json_decode( $parameters['results'], true ) : array();
 
 		update_post_meta( $post_id, 'env', $env );
