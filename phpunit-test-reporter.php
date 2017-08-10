@@ -1,7 +1,7 @@
 <?php
-namespace WPUTR;
+namespace PTR;
 /**
- * Plugin Name: WP Unit Test Reporter
+ * Plugin Name: PHPUnit Test Reporter
  * Plugin URI: http://domain.com
  * Description: Description
  * Version: 1.0.0
@@ -19,12 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Main wp-unit-test-reporter Class
  *
- * @class WP_Unit_Test_Reporter
+ * @class PHPUnit_Test_Reporter
  * @version 1.0.0
  * @since 1.0.0
- * @package WP_Unit_Test_Reporter
+ * @package PHPUnit_Test_Reporter
  */
-final class WP_Unit_Test_Reporter {
+final class PHPUnit_Test_Reporter {
 	// Define and register singleton
 	private static $instance = false;
 	public static function instance() {
@@ -51,4 +51,4 @@ final class WP_Unit_Test_Reporter {
 
 } // End Class
 
-WP_Unit_Test_Reporter::instance();
+PHPUnit_Test_Reporter::instance();

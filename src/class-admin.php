@@ -1,5 +1,5 @@
 <?php
-namespace WPUTR;
+namespace PTR;
 class Admin {
 
 	/**
