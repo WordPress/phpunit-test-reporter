@@ -47,17 +47,17 @@ if ( $parent ) :
 </table>
 
 <?php if ( ! empty( $results['failures'] ) ) : ?>
-	<h2>Failures</h2>
+	<h2>Errors/Failures</h2>
 
 	<?php
 	foreach ( $results['testsuites'] as $suite_name => $testsuite ) :
-		if ( empty( $testsuite['failures'] ) ) {
+		if ( empty( $testsuite['failures'] ) && empty( $testsuite['errors'] ) ) {
 			continue;
 		}
 		foreach ( $testsuite['testcases'] as $test_name => $testcase ) :
 		?>
 		<p><strong><?php echo esc_html( $suite_name . '::' . $test_name ); ?></strong></p>
-		<pre><?php echo $testcase['failure']; ?></pre>
+		<pre><?php echo ! empty( $testcase['failure'] ) ? $testcase['failure'] : $testcase['error']; ?></pre>
 		<?php endforeach; ?>
 		<?php endforeach; ?>
 <?php endif; ?>
