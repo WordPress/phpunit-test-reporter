@@ -14,6 +14,31 @@ class Shortcode {
 	}
 
 	/**
+	 * Filter post classes
+	 */
+	public static function filter_post_class( $classes ) {
+		if ( is_singular( 'result' ) ) {
+			$classes[] = 'page';
+		}
+		return $classes;
+	}
+
+	/**
+	 * Render the data for an individual result within the main content well
+	 */
+	public static function filter_the_content( $content ) {
+		if ( ! is_singular( 'result' ) ) {
+			return $content;
+		}
+
+		if ( get_queried_object()->post_parent ) {
+			$content = ptr_get_template_part( 'single-result', array( 'report' => get_queried_object() ) );
+		}
+
+		return $content;
+	}
+
+	/**
 	 * Render the test results.
 	 */
 	public static function render_results( $atts ) {
@@ -147,7 +172,7 @@ class Shortcode {
 							?>
 						<tr>
 							<td></td>
-							<td><a href="#" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
+							<td><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
 							<td><?php echo esc_html( $php_version ); ?></td>
 							<td><?php echo esc_html( $mysql_version ); ?></td>

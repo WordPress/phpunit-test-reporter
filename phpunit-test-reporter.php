@@ -22,4 +22,30 @@ require_once dirname( __FILE__ ) . '/src/class-shortcode.php';
 
 add_action( 'init', array( 'PTR\Admin', 'create_custom_post_type' ) );
 add_action( 'init', array( 'PTR\Shortcode', 'action_init_register' ) );
+add_action( 'post_class', array( 'PTR\Shortcode', 'filter_post_class' ) );
+add_action( 'the_content', array( 'PTR\Shortcode', 'filter_the_content' ) );
 add_action( 'rest_api_init', array( 'PTR\RestAPI', 'register_routes' ) );
+
+/**
+ * Get a rendered template part
+ *
+ * @param string $template
+ * @param array $vars
+ * @return string
+ */
+function ptr_get_template_part( $template, $vars = array() ) {
+	$full_path = dirname( __FILE__ ) . '/parts/' . $template . '.php';
+
+	if ( ! file_exists( $full_path ) ) {
+		return '';
+	}
+
+	ob_start();
+	// @codingStandardsIgnoreStart
+	if ( ! empty( $vars ) ) {
+		extract( $vars );
+	}
+	// @codingStandardsIgnoreEnd
+	include $full_path;
+	return ob_get_clean();
+}
