@@ -4,13 +4,38 @@ namespace PTR;
 
 use WP_Query;
 
-class Shortcode {
+class Display {
 
 	/**
 	 * Register the shortcode.
 	 */
-	public static function action_init_register() {
+	public static function action_init_register_shortcode() {
 		add_shortcode( 'ptr-results', array( __CLASS__, 'render_results' ) );
+	}
+
+	/**
+	 * Filter post classes
+	 */
+	public static function filter_post_class( $classes ) {
+		if ( is_singular( 'result' ) ) {
+			$classes[] = 'page';
+		}
+		return $classes;
+	}
+
+	/**
+	 * Render the data for an individual result within the main content well
+	 */
+	public static function filter_the_content( $content ) {
+		if ( ! is_singular( 'result' ) ) {
+			return $content;
+		}
+
+		if ( get_queried_object()->post_parent ) {
+			$content = ptr_get_template_part( 'single-result', array( 'report' => get_queried_object() ) );
+		}
+
+		return $content;
 	}
 
 	/**
@@ -40,40 +65,8 @@ class Shortcode {
 			echo '<p>No revisions found</p>';
 			return ob_get_clean();
 		}
+		echo self::get_display_css();
 		?>
-		<style>
-			a.ptr-status-badge {
-				color: #FFF;
-				display: inline-block;
-				padding-left: 8px;
-				padding-right: 8px;
-				padding-top: 3px;
-				padding-bottom: 3px;
-				border-radius: 3px;
-				font-weight: normal;
-			}
-			a.ptr-status-badge-passed {
-				background-color: #39BC00;
-			}
-			a.ptr-status-badge-failed {
-				background-color: #CD543A;
-			}
-			a.ptr-status-badge-errored {
-				background-color: #909090;
-			}
-			.pagination-centered {
-				text-align: center;
-			}
-			.pagination-centered ul.pagination {
-				list-style-type: none;
-			}
-			.pagination-centered ul.pagination li {
-				display: inline-block;
-			}
-			.pagination-centered ul.pagination li a {
-				cursor: pointer;
-			}
-		</style>
 		<table>
 			<thead>
 				<tr>
@@ -118,40 +111,14 @@ class Shortcode {
 							if ( $user ) {
 								$host = $user->display_name;
 							}
-							$php_version = 'Unknown';
-							$extensions = array();
-							$mysql_version = 'Unknown';
-							$env = get_post_meta( $report->ID, 'env', true );
-							if ( ! empty( $env['php_version'] ) ) {
-								$php_version = 'PHP ' . $env['php_version'];
-							}
-							if ( ! empty( $env['mysql_version'] ) ) {
-								$bits = explode( ',', $env['mysql_version'] );
-								$mysql_version = $bits[0];
-							}
-							if ( ! empty( $env['php_modules'] ) ) {
-								foreach( $env['php_modules'] as $module => $version ) {
-									if ( ! empty( $version ) ) {
-										$extensions[] = $module . ' (' . $version . ')';
-									}
-								}
-							}
-							if ( ! empty( $env['system_utils'] ) ) {
-								foreach( $env['system_utils'] as $module => $version ) {
-									if ( ! empty( $version ) ) {
-										$extensions[] = $module . ' (' . $version . ')';
-									}
-								}
-							}
-							$extensions = implode( ', ', $extensions );
 							?>
 						<tr>
 							<td></td>
-							<td><a href="#" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
+							<td><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
-							<td><?php echo esc_html( $php_version ); ?></td>
-							<td><?php echo esc_html( $mysql_version ); ?></td>
-							<td><?php echo esc_html( $extensions ); ?></td>
+							<td><?php echo esc_html( self::get_display_php_version( $report->ID ) ); ?></td>
+							<td><?php echo esc_html( self::get_display_mysql_version( $report->ID ) ); ?></td>
+							<td><?php echo esc_html( self::get_display_extensions( $report->ID ) ); ?></td>
 						</tr>
 					<?php
 						endforeach;
@@ -169,6 +136,107 @@ class Shortcode {
 		<?php
 		self::pagination( $rev_query );
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get the CSS needed for display
+	 *
+	 * @return string
+	 */
+	public static function get_display_css() {
+		ob_start(); ?>
+		<style>
+			a.ptr-status-badge {
+				color: #FFF;
+				display: inline-block;
+				padding-left: 8px;
+				padding-right: 8px;
+				padding-top: 3px;
+				padding-bottom: 3px;
+				border-radius: 3px;
+				font-weight: normal;
+			}
+			a.ptr-status-badge-passed {
+				background-color: #39BC00;
+			}
+			a.ptr-status-badge-failed {
+				background-color: #CD543A;
+			}
+			a.ptr-status-badge-errored {
+				background-color: #909090;
+			}
+			.pagination-centered {
+				text-align: center;
+			}
+			.pagination-centered ul.pagination {
+				list-style-type: none;
+			}
+			.pagination-centered ul.pagination li {
+				display: inline-block;
+			}
+			.pagination-centered ul.pagination li a {
+				cursor: pointer;
+			}
+		</style>
+		<?php return ob_get_clean();
+		
+	}
+
+	/**
+	 * Get the PHP version for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_php_version( $report_id ) {
+		$php_version = 'Unknown';
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['php_version'] ) ) {
+			$php_version = 'PHP ' . $env['php_version'];
+		}
+		return $php_version;
+	}
+
+	/**
+	 * Get the database version for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_mysql_version( $report_id ) {
+		$mysql_version = 'Unknown';
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['mysql_version'] ) ) {
+			$bits = explode( ',', $env['mysql_version'] );
+			$mysql_version = $bits[0];
+		}
+		return $mysql_version;
+	}
+
+	/**
+	 * Get the extensions list for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_extensions( $report_id ) {
+		$extensions = array();
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! empty( $env['php_modules'] ) ) {
+			foreach( $env['php_modules'] as $module => $version ) {
+				if ( ! empty( $version ) ) {
+					$extensions[] = $module . ' (' . $version . ')';
+				}
+			}
+		}
+		if ( ! empty( $env['system_utils'] ) ) {
+			foreach( $env['system_utils'] as $module => $version ) {
+				if ( ! empty( $version ) ) {
+					$extensions[] = $module . ' (' . $version . ')';
+				}
+			}
+		}
+		return implode( ', ', $extensions );
 	}
 
 	private static function pagination( $query ) {
