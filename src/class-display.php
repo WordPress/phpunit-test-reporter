@@ -65,40 +65,8 @@ class Display {
 			echo '<p>No revisions found</p>';
 			return ob_get_clean();
 		}
+		echo self::get_display_css();
 		?>
-		<style>
-			a.ptr-status-badge {
-				color: #FFF;
-				display: inline-block;
-				padding-left: 8px;
-				padding-right: 8px;
-				padding-top: 3px;
-				padding-bottom: 3px;
-				border-radius: 3px;
-				font-weight: normal;
-			}
-			a.ptr-status-badge-passed {
-				background-color: #39BC00;
-			}
-			a.ptr-status-badge-failed {
-				background-color: #CD543A;
-			}
-			a.ptr-status-badge-errored {
-				background-color: #909090;
-			}
-			.pagination-centered {
-				text-align: center;
-			}
-			.pagination-centered ul.pagination {
-				list-style-type: none;
-			}
-			.pagination-centered ul.pagination li {
-				display: inline-block;
-			}
-			.pagination-centered ul.pagination li a {
-				cursor: pointer;
-			}
-		</style>
 		<table>
 			<thead>
 				<tr>
@@ -168,6 +136,50 @@ class Display {
 		<?php
 		self::pagination( $rev_query );
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get the CSS needed for display
+	 *
+	 * @return string
+	 */
+	public static function get_display_css() {
+		ob_start(); ?>
+		<style>
+			a.ptr-status-badge {
+				color: #FFF;
+				display: inline-block;
+				padding-left: 8px;
+				padding-right: 8px;
+				padding-top: 3px;
+				padding-bottom: 3px;
+				border-radius: 3px;
+				font-weight: normal;
+			}
+			a.ptr-status-badge-passed {
+				background-color: #39BC00;
+			}
+			a.ptr-status-badge-failed {
+				background-color: #CD543A;
+			}
+			a.ptr-status-badge-errored {
+				background-color: #909090;
+			}
+			.pagination-centered {
+				text-align: center;
+			}
+			.pagination-centered ul.pagination {
+				list-style-type: none;
+			}
+			.pagination-centered ul.pagination li {
+				display: inline-block;
+			}
+			.pagination-centered ul.pagination li a {
+				cursor: pointer;
+			}
+		</style>
+		<?php return ob_get_clean();
+		
 	}
 
 	/**

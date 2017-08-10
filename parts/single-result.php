@@ -13,6 +13,9 @@ $user = get_user_by( 'id', $report->post_author );
 if ( $user ) {
 	$host = $user->display_name;
 } ?>
+
+<?php echo Display::get_display_css(); ?>
+
 <p><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></p>
 
 <h2>Environment</h2>
