@@ -1,6 +1,6 @@
 <?php
 
-namespace WPUTR;
+namespace PTR;
 
 use WP_Query;
 
@@ -10,7 +10,7 @@ class Shortcode {
 	 * Register the shortcode.
 	 */
 	public static function action_init_register() {
-		add_shortcode( 'wputr-results', array( __CLASS__, 'render_results' ) );
+		add_shortcode( 'ptr-results', array( __CLASS__, 'render_results' ) );
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Shortcode {
 		}
 		?>
 		<style>
-			a.wputr-status-badge {
+			a.ptr-status-badge {
 				color: #FFF;
 				display: inline-block;
 				padding-left: 8px;
@@ -52,13 +52,13 @@ class Shortcode {
 				border-radius: 3px;
 				font-weight: normal;
 			}
-			a.wputr-status-badge-passed {
+			a.ptr-status-badge-passed {
 				background-color: #39BC00;
 			}
-			a.wputr-status-badge-failed {
+			a.ptr-status-badge-failed {
 				background-color: #CD543A;
 			}
-			a.wputr-status-badge-errored {
+			a.ptr-status-badge-errored {
 				background-color: #909090;
 			}
 			.pagination-centered {
@@ -147,7 +147,7 @@ class Shortcode {
 							?>
 						<tr>
 							<td></td>
-							<td><a href="#" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'wputr-status-badge wputr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
+							<td><a href="#" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
 							<td><?php echo esc_html( $host ); ?></td>
 							<td><?php echo esc_html( $php_version ); ?></td>
 							<td><?php echo esc_html( $mysql_version ); ?></td>
@@ -219,5 +219,3 @@ class Shortcode {
 	}
 
 }
-
-add_action( 'init', array( 'WPUTR\Shortcode', 'action_init_register' ) );

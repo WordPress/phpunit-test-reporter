@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Wp_Unit_Test_Reporter
+ * @package PHPUnit_Test_Reporter
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -17,7 +17,7 @@ require_once $_tests_dir . '/includes/functions.php';
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/wp-unit-test-reporter.php';
+	require dirname( dirname( __FILE__ ) ) . '/phpunit-test-reporter.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 

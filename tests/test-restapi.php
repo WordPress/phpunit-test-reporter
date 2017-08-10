@@ -2,7 +2,7 @@
 /**
  * Class TestRestAPI
  *
- * @package Wp_Unit_Test_Reporter
+ * @package PHPUnit_Test_Reporter
  */
 
 /**

@@ -1,34 +1,17 @@
 <?php
-namespace WPUTR;
+namespace PTR;
 class RestAPI {
-
-	// Define and register singleton
-	private static $instance = false;
-	public static function instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self;
-			self::$instance->init();
-		}
-		return self::$instance;
-	}
-
-	/**
-	 * Constructor
-	 */
-	public static function init() {
-		add_action( 'rest_api_init', array( self::instance(), 'register_routes' ) );
-	}
 
 	/**
 	 * Register REST API routes.
 	 *
 	 * @action rest_api_init
 	 */
-	function register_routes() {
+	public static function register_routes() {
 		register_rest_route(
 			'wp-unit-test-api/v1', 'results', array(
 				'methods' => 'POST',
-				'callback' => array( $this, 'add_results_callback' ),
+				'callback' => array( __CLASS__, 'add_results_callback' ),
 				'args' => array(
 					'commit' => array(
 						'required' => true,
@@ -51,17 +34,17 @@ class RestAPI {
 						'type' => 'string',
 					),
 				),
-				'permission_callback' => array( $this, 'permission' ),
+				'permission_callback' => array( __CLASS__, 'permission' ),
 			)
 		);
 	}
 
-	function permission() {
+	public static function permission() {
 		// TODO: Update this.
 		return current_user_can( 'edit_posts' );
 	}
 
-	function add_results_callback( $data ) {
+	public static function add_results_callback( $data ) {
 		$parameters = $data->get_params();
 
 		$slug = 'r' . $parameters['commit'];
@@ -128,5 +111,3 @@ class RestAPI {
 		return $response;
 	}
 }
-
-RestAPI::instance();
