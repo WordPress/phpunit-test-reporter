@@ -17,7 +17,7 @@ echo Display::get_display_css(); ?>
 	<tbody>
 		<?php
 		$total_cols = 6;
-		foreach( $revisions as $revision ) :
+		foreach ( $revisions as $revision ) :
 			$rev_id = (int) ltrim( $revision->post_name, 'r' );
 		?>
 			<tr>
@@ -34,7 +34,7 @@ echo Display::get_display_css(); ?>
 			);
 			$report_query = new WP_Query( $query_args );
 			if ( ! empty( $report_query->posts ) ) :
-				foreach( $report_query->posts as $report ) :
+				foreach ( $report_query->posts as $report ) :
 					$status = 'Errored';
 					$status_title = 'No results found for test.';
 					$results = get_post_meta( $report->ID, 'results', true );
@@ -58,7 +58,8 @@ echo Display::get_display_css(); ?>
 				</tr>
 			<?php
 				endforeach;
-			else : ?>
+			else :
+			?>
 				<tr>
 					<td></td>
 					<td colspan="<?php echo (int) $total_cols - 1; ?>">
