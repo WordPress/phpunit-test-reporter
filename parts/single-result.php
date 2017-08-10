@@ -18,7 +18,8 @@ if ( $user ) {
 
 <?php
 $parent = get_post( $report->post_parent );
-if ( $parent ) : ?>
+if ( $parent ) :
+?>
 <p><a href="<?php echo esc_url( get_permalink( $parent ) ); ?>">&larr; <?php echo esc_html( $parent->post_name ) . ': ' . apply_filters( 'the_title', get_the_title( $parent ) ); ?></a></p>
 <?php endif; ?>
 
@@ -41,18 +42,20 @@ if ( $parent ) : ?>
 	</tr>
 	<tr>
 		<td><strong>Extensions</strong></td>
-		<td><?php echo esc_html( Display::get_display_extensions( $report->ID ) ) ?></td>
+		<td><?php echo esc_html( Display::get_display_extensions( $report->ID ) ); ?></td>
 	</tr>
 </table>
 
 <?php if ( ! empty( $results['failures'] ) ) : ?>
 	<h2>Failures</h2>
 
-	<?php foreach( $results['testsuites'] as $suite_name => $testsuite ) :
+	<?php
+	foreach ( $results['testsuites'] as $suite_name => $testsuite ) :
 		if ( empty( $testsuite['failures'] ) ) {
 			continue;
 		}
-		foreach( $testsuite['testcases'] as $test_name => $testcase ) : ?>
+		foreach ( $testsuite['testcases'] as $test_name => $testcase ) :
+		?>
 		<p><strong><?php echo esc_html( $suite_name . '::' . $test_name ); ?></strong></p>
 		<pre><?php echo $testcase['failure']; ?></pre>
 		<?php endforeach; ?>
