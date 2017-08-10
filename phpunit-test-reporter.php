@@ -16,39 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-/**
- * Main wp-unit-test-reporter Class
- *
- * @class PHPUnit_Test_Reporter
- * @version 1.0.0
- * @since 1.0.0
- * @package PHPUnit_Test_Reporter
- */
-final class PHPUnit_Test_Reporter {
-	// Define and register singleton
-	private static $instance = false;
-	public static function instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self;
-		}
-		return self::$instance;
-	}
+require_once dirname( __FILE__ ) . '/src/class-admin.php';
+require_once dirname( __FILE__ ) . '/src/class-restapi.php';
+require_once dirname( __FILE__ ) . '/src/class-shortcode.php';
 
-	/**
-	 * Constructor function.
-	 *
-	 * @access  public
-	 * @since   1.0.0
-	 */
-	public function __construct() {
-		// RestAPI.
-		require_once( 'src/class-restapi.php' );
-		// Admin.
-		require_once( 'src/class-admin.php' );
-		require_once( 'src/class-shortcode.php' );
-
-	} // End __construct()
-
-} // End Class
-
-PHPUnit_Test_Reporter::instance();
+add_action( 'init', array( 'PTR\Admin', 'create_custom_post_type' ) );
+add_action( 'init', array( 'PTR\Shortcode', 'action_init_register' ) );
+add_action( 'rest_api_init', array( 'PTR\RestAPI', 'register_routes' ) );

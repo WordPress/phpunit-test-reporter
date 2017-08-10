@@ -219,5 +219,3 @@ class Shortcode {
 	}
 
 }
-
-add_action( 'init', array( 'PTR\Shortcode', 'action_init_register' ) );
