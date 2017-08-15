@@ -26,6 +26,7 @@ class RestAPI {
 						'required' => true,
 						'description' => 'phpunit results in JSON format.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'message' => array(
 						'required' => true,
@@ -37,6 +38,7 @@ class RestAPI {
 						'required' => true,
 						'description' => 'JSON blob containing information about the environment.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 				),
 				'permission_callback' => array( __CLASS__, 'permission' ),
@@ -56,6 +58,14 @@ class RestAPI {
 			case 'message':
 				if ( empty( $value ) || ! is_string( $value ) ) {
 					return new WP_Error( 'rest_invalid', __( 'Value must be a non-empty string.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+			case 'env':
+			case 'results':
+				if ( null === json_decode( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be encoded JSON.', 'ptr' ), array(
 						'status' => 400,
 					) );
 				}

@@ -35,7 +35,9 @@ class TestRestAPI extends WP_UnitTestCase {
 		wp_set_current_user( $subscriber_id );
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 		$request->set_body_params( array(
-			'results' => 'test',
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
 			'env' => json_encode( array(
@@ -51,7 +53,9 @@ class TestRestAPI extends WP_UnitTestCase {
 	public function test_create_result_invalid_commit() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 		$request->set_body_params( array(
-			'results' => 'test',
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
 			'commit' => 'abc1234',
 			'message' => 'Docs: Did something',
 			'env' => json_encode( array(
@@ -68,7 +72,9 @@ class TestRestAPI extends WP_UnitTestCase {
 	public function test_create_result_invalid_message() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 		$request->set_body_params( array(
-			'results' => 'test',
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
 			'commit' => '1234',
 			'message' => '',
 			'env' => json_encode( array(
@@ -131,7 +137,9 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "1"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'env' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
 		) );
 
 		$response = $this->server->dispatch( $request );
@@ -148,7 +156,9 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "0"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'env' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
 		) );
 
 		$this->server->dispatch( $request );
