@@ -102,6 +102,7 @@ class TestRestAPI extends WP_UnitTestCase {
 
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+		$this->assertEquals( 201, $response->get_status() );
 
 		$this->assertTrue( isset( $data['id'] ) );
 		$this->assertTrue( isset( $data['link'] ) );
@@ -143,6 +144,7 @@ class TestRestAPI extends WP_UnitTestCase {
 		) );
 
 		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 201, $response->get_status() );
 		$data = $response->get_data();
 		$post_id = $data['id'];
 
@@ -162,6 +164,7 @@ class TestRestAPI extends WP_UnitTestCase {
 		) );
 
 		$this->server->dispatch( $request );
+		$this->assertEquals( 201, $response->get_status() );
 
 		$results = get_post_meta( $post_id, 'results', true );
 		$this->assertEquals( array(
