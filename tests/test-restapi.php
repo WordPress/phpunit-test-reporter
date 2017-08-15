@@ -28,11 +28,71 @@ class TestRestAPI extends WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
-	public function test_add_result() {
+	public function test_create_result_unauthorized() {
+		$subscriber_id = $this->factory->user->create( array(
+			'role' => 'subscriber',
+		) );
+		wp_set_current_user( $subscriber_id );
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
+			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 403, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Sorry, you are not allowed to create results.', $data['message'] );
+	}
+
+	public function test_create_result_invalid_commit() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
+			'commit' => 'abc1234',
+			'message' => 'Docs: Did something',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 400, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Invalid parameter(s): commit', $data['message'] );
+		$this->assertEquals( 'Value must be numeric.', $data['data']['params']['commit'] );
+	}
+
+	public function test_create_result_invalid_message() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => json_encode( array(
+				'failures' => 5,
+			) ),
+			'commit' => '1234',
+			'message' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 400, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Invalid parameter(s): message', $data['message'] );
+		$this->assertEquals( 'Value must be a non-empty string.', $data['data']['params']['message'] );
+	}
+
+	public function test_create_result_success() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
 		$request->set_body_params( array(
-			'results' => 'test',
+			'results' => '{"failures": "5"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
 			'env' => json_encode( array(
@@ -42,6 +102,7 @@ class TestRestAPI extends WP_UnitTestCase {
 
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
+		$this->assertEquals( 201, $response->get_status() );
 
 		$this->assertTrue( isset( $data['id'] ) );
 		$this->assertTrue( isset( $data['link'] ) );
@@ -59,25 +120,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$results = get_children( $args );
 
 		$this->assertEquals( 1, count( $results ) );
-	}
-
-	public function test_add_result_saves_post_meta() {
-		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
-
-		$request->set_body_params( array(
-			'results' => '{"failures": "5"}',
-			'commit' => '1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
-
-		$response = $this->server->dispatch( $request );
-		$data = $response->get_data();
-
-		$post_id = $data['id'];
-
+		$result = array_pop( $results );
+		$post_id = $result->ID;
 		$env = get_post_meta( $post_id, 'env', true );
 		$results = get_post_meta( $post_id, 'results', true );
 
@@ -87,17 +131,20 @@ class TestRestAPI extends WP_UnitTestCase {
 		), $results );
 	}
 
-	public function test_add_result_updates_existing_results() {
+	public function test_update_result_success_update_existing() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
 		$request->set_body_params( array(
 			'results' => '{"failures": "1"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'env' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
 		) );
 
 		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 201, $response->get_status() );
 		$data = $response->get_data();
 		$post_id = $data['id'];
 
@@ -111,10 +158,13 @@ class TestRestAPI extends WP_UnitTestCase {
 			'results' => '{"failures": "0"}',
 			'commit' => '1234',
 			'message' => 'Docs: Did something',
-			'env' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
 		) );
 
 		$this->server->dispatch( $request );
+		$this->assertEquals( 201, $response->get_status() );
 
 		$results = get_post_meta( $post_id, 'results', true );
 		$this->assertEquals( array(

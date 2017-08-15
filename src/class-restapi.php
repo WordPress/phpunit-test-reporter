@@ -1,5 +1,8 @@
 <?php
 namespace PTR;
+
+use WP_Error;
+
 class RestAPI {
 
 	/**
@@ -15,23 +18,27 @@ class RestAPI {
 				'args' => array(
 					'commit' => array(
 						'required' => true,
-						'description' => 'The SVN commit SHA.',
-						'type' => 'string',
+						'description' => 'The SVN commit changeset number.',
+						'type' => 'numeric',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'results' => array(
 						'required' => true,
 						'description' => 'phpunit results in JSON format.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'message' => array(
 						'required' => true,
 						'description' => 'The SVN commit message.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'env' => array(
 						'required' => true,
 						'description' => 'JSON blob containing information about the environment.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 				),
 				'permission_callback' => array( __CLASS__, 'permission' ),
@@ -39,9 +46,43 @@ class RestAPI {
 		);
 	}
 
+	public static function validate_callback( $value, $request, $key ) {
+		switch ( $key ) {
+			case 'commit':
+				if ( ! is_numeric( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be numeric.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+			case 'message':
+				if ( empty( $value ) || ! is_string( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be a non-empty string.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+			case 'env':
+			case 'results':
+				if ( null === json_decode( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be encoded JSON.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+		}
+		return new WP_Error( 'rest_invalid', __( 'Invalid key specified.', 'ptr' ), array(
+			'status' => 400,
+		) );
+	}
+
 	public static function permission() {
-		// TODO: Update this.
-		return current_user_can( 'edit_posts' );
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return new WP_Error( 'rest_unauthorized', __( 'Sorry, you are not allowed to create results.', 'ptr' ), array(
+				'status' => 403,
+			) );
+		}
+		return true;
 	}
 
 	public static function add_results_callback( $data ) {
