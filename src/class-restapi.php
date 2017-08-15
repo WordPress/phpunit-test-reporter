@@ -1,5 +1,8 @@
 <?php
 namespace PTR;
+
+use WP_Error;
+
 class RestAPI {
 
 	/**
@@ -40,8 +43,12 @@ class RestAPI {
 	}
 
 	public static function permission() {
-		// TODO: Update this.
-		return current_user_can( 'edit_posts' );
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return new WP_Error( 'rest_unauthorized', __( 'Sorry, you are not allowed to create results.', 'ptr' ), array(
+				'status' => 403,
+			) );
+		}
+		return true;
 	}
 
 	public static function add_results_callback( $data ) {

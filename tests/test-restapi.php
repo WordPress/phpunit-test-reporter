@@ -28,6 +28,26 @@ class TestRestAPI extends WP_UnitTestCase {
 		do_action( 'rest_api_init' );
 	}
 
+	public function test_create_result_unauthorized() {
+		$subscriber_id = $this->factory->user->create( array(
+			'role' => 'subscriber',
+		) );
+		wp_set_current_user( $subscriber_id );
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => 'test',
+			'commit' => '1234',
+			'message' => 'Docs: Did something',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 403, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Sorry, you are not allowed to create results.', $data['message'] );
+	}
+
 	public function test_add_result() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
