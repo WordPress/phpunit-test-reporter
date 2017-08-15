@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-require_once dirname( __FILE__ ) . '/src/class-admin.php';
+require_once dirname( __FILE__ ) . '/src/class-content-model.php';
 require_once dirname( __FILE__ ) . '/src/class-restapi.php';
 require_once dirname( __FILE__ ) . '/src/class-display.php';
 
-add_action( 'init', array( 'PTR\Admin', 'create_custom_post_type' ) );
+add_action( 'init', array( 'PTR\Content_Model', 'action_init_register_post_type' ) );
 add_action( 'init', array( 'PTR\Display', 'action_init_register_shortcode' ) );
 add_action( 'post_class', array( 'PTR\Display', 'filter_post_class' ) );
 add_action( 'the_content', array( 'PTR\Display', 'filter_the_content' ) );
