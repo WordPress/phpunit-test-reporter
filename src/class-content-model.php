@@ -1,6 +1,6 @@
 <?php
 namespace PTR;
-class Admin {
+class Content_Model {
 
 	/**
 	 * Create custom post type to store the directories we need to process.
