@@ -48,6 +48,40 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals( 'Sorry, you are not allowed to create results.', $data['message'] );
 	}
 
+	public function test_create_result_invalid_commit() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => 'test',
+			'commit' => 'abc1234',
+			'message' => 'Docs: Did something',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 400, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Invalid parameter(s): commit', $data['message'] );
+		$this->assertEquals( 'Value must be numeric.', $data['data']['params']['commit'] );
+	}
+
+	public function test_create_result_invalid_message() {
+		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
+		$request->set_body_params( array(
+			'results' => 'test',
+			'commit' => '1234',
+			'message' => '',
+			'env' => json_encode( array(
+				'php_version' => '7.1',
+			) ),
+		) );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 400, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertEquals( 'Invalid parameter(s): message', $data['message'] );
+		$this->assertEquals( 'Value must be a non-empty string.', $data['data']['params']['message'] );
+	}
+
 	public function test_add_result() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 

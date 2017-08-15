@@ -18,8 +18,9 @@ class RestAPI {
 				'args' => array(
 					'commit' => array(
 						'required' => true,
-						'description' => 'The SVN commit SHA.',
-						'type' => 'string',
+						'description' => 'The SVN commit changeset number.',
+						'type' => 'numeric',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'results' => array(
 						'required' => true,
@@ -30,6 +31,7 @@ class RestAPI {
 						'required' => true,
 						'description' => 'The SVN commit message.',
 						'type' => 'string',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'env' => array(
 						'required' => true,
@@ -40,6 +42,28 @@ class RestAPI {
 				'permission_callback' => array( __CLASS__, 'permission' ),
 			)
 		);
+	}
+
+	public static function validate_callback( $value, $request, $key ) {
+		switch ( $key ) {
+			case 'commit':
+				if ( ! is_numeric( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be numeric.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+			case 'message':
+				if ( empty( $value ) || ! is_string( $value ) ) {
+					return new WP_Error( 'rest_invalid', __( 'Value must be a non-empty string.', 'ptr' ), array(
+						'status' => 400,
+					) );
+				}
+				return true;
+		}
+		return new WP_Error( 'rest_invalid', __( 'Invalid key specified.', 'ptr' ), array(
+			'status' => 400,
+		) );
 	}
 
 	public static function permission() {
