@@ -124,7 +124,7 @@ class TestRestAPI extends WP_UnitTestCase {
 		), $results );
 	}
 
-	public function test_add_result_updates_existing_results() {
+	public function test_update_result_success_update_existing() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
 		$request->set_body_params( array(
