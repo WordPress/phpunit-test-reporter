@@ -30,7 +30,7 @@ class TestRestAPI extends WP_UnitTestCase {
 
 	public function test_create_result_unauthorized() {
 		$subscriber_id = $this->factory->user->create( array(
-			'role' => 'subscriber',
+			'role' => 'author',
 		) );
 		wp_set_current_user( $subscriber_id );
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
