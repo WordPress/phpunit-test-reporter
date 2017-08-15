@@ -8,7 +8,7 @@ class Content_Model {
 	 * @since 1.0.0
 	 * @return  null
 	 */
-	public static function create_custom_post_type() {
+	public static function action_init_register_post_type() {
 		 register_post_type(
 			 'result',
 			 array(
