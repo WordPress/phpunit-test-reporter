@@ -77,7 +77,7 @@ class RestAPI {
 	}
 
 	public static function permission() {
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'edit_results' ) ) {
 			return new WP_Error( 'rest_unauthorized', __( 'Sorry, you are not allowed to create results.', 'ptr' ), array(
 				'status' => 403,
 			) );

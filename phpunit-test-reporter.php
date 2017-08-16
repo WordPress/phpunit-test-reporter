@@ -21,6 +21,7 @@ require_once dirname( __FILE__ ) . '/src/class-restapi.php';
 require_once dirname( __FILE__ ) . '/src/class-display.php';
 
 add_action( 'init', array( 'PTR\Content_Model', 'action_init_register_post_type' ) );
+add_action( 'init', array( 'PTR\Content_Model', 'action_init_register_role' ) );
 add_action( 'init', array( 'PTR\Display', 'action_init_register_shortcode' ) );
 add_action( 'post_class', array( 'PTR\Display', 'filter_post_class' ) );
 add_action( 'the_content', array( 'PTR\Display', 'filter_the_content' ) );
