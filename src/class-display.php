@@ -41,6 +41,7 @@ class Display {
 					get_queried_object(),
 				),
 			) );
+			$content = '<p><a href="' . esc_url( home_url( 'test-results/' ) ) . '">&larr; Test Results</a></p>' . PHP_EOL . PHP_EOL . $content;
 		}
 
 		return $content;
