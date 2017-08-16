@@ -125,6 +125,21 @@ class Display {
 	}
 
 	/**
+	 * Get the time for display
+	 *
+	 * @return string
+	 */
+	public static function get_display_time( $report_id ) {
+		$results = get_post_meta( $report_id, 'results', true );
+		if ( empty( $results['time'] ) ) {
+			return '';
+		}
+		$minutes = floor( ( (int) $results['time'] / 60 ) % 60 );
+		$seconds = (int) $results['time'] % 60;
+		return "{$minutes}m {$seconds}s";
+	}
+
+	/**
 	 * Get the PHP version for display
 	 *
 	 * @param integer $report_id Report ID.
