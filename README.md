@@ -1,16 +1,19 @@
-# WP Unit Test Reporter [![Build Status](https://travis-ci.org/octalmage/wp-unit-test-api.svg?branch=master)](https://travis-ci.org/octalmage/wp-unit-test-api)
+# PHPUnit Test Reporter #
+**Contributors:** octalmage, danielbachhuber  
+**Tags:** phpunit  
+**Requires at least:** 4.7  
+**Tested up to:** 4.8  
+**Stable tag:** 0.1.0  
+**License:** GPLv3  
+**License URI:** http://www.gnu.org/licenses/gpl-3.0.html  
 
-## Getting Started
+Captures and displays test results from the PHPUnit Test Runner
 
-1. In the project directory, run:
+## Description ##
 
-	```
-	make start
-	```
-1. Then open the WordPress install:
+Captures and displays test results from the PHPUnit Test Runner
 
-	http://localhost:8080
+## Changelog ##
 
-You'll then need to install WordPress and activate the plugin.
-
-You can shell into the container using `make shell`.
+### 0.1.0 (April 15th, 2017) ###
+* Initial release.
