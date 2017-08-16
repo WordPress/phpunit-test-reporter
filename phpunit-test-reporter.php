@@ -1,17 +1,18 @@
 <?php
-namespace PTR;
 /**
- * Plugin Name: PHPUnit Test Reporter
- * Plugin URI: http://domain.com
- * Description: Description
- * Version: 1.0.0
- * Requires at least: 4.7.0
- * Tested up to: 4.7.0
- * Text Domain: wp-unit-test-api
+ * Plugin Name:     PHPUnit Test Reporter
+ * Plugin URI:      https://make.wordpress.org/hosting/phpunit-test-results/
+ * Description:     Captures and displays test results from the PHPUnit Test Runner
+ * Author:          WordPress Hosting Community
+ * Author URI:      https://make.wordpress.org/hosting/
+ * Text Domain:     ptr
+ * Domain Path:     /languages
+ * Version:         0.1.0
+ * License:         GPL v3
  *
- * @package WP_Unit_Test_API
- * @category Core
+ * @package         PTR
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
