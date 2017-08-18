@@ -35,6 +35,10 @@ class Display {
 			return $content;
 		}
 
+		if ( ! did_action( 'loop_start' ) ) {
+			return $content;
+		}
+
 		if ( get_queried_object()->post_parent ) {
 			$content = ptr_get_template_part( 'single-result', array(
 				'report' => get_queried_object(),
