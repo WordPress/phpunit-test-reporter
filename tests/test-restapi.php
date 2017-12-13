@@ -14,7 +14,7 @@ class TestRestAPI extends WP_UnitTestCase {
 		parent::setUp();
 
 		global $wp_rest_server;
-		$this->server = new WP_REST_Server;
+		$this->server   = new WP_REST_Server;
 		$wp_rest_server = $this->server;
 
 		$this->administrator = $this->factory->user->create(
@@ -29,21 +29,29 @@ class TestRestAPI extends WP_UnitTestCase {
 	}
 
 	public function test_create_result_unauthorized() {
-		$subscriber_id = $this->factory->user->create( array(
-			'role' => 'author',
-		) );
+		$subscriber_id = $this->factory->user->create(
+			array(
+				'role' => 'author',
+			)
+		);
 		wp_set_current_user( $subscriber_id );
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
-		$request->set_body_params( array(
-			'results' => json_encode( array(
-				'failures' => 5,
-			) ),
-			'commit' => '1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => json_encode(
+					array(
+						'failures' => 5,
+					)
+				),
+				'commit'  => '1234',
+				'message' => 'Docs: Did something',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 403, $response->get_status() );
 		$data = $response->get_data();
@@ -52,16 +60,22 @@ class TestRestAPI extends WP_UnitTestCase {
 
 	public function test_create_result_invalid_commit() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
-		$request->set_body_params( array(
-			'results' => json_encode( array(
-				'failures' => 5,
-			) ),
-			'commit' => 'abc1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => json_encode(
+					array(
+						'failures' => 5,
+					)
+				),
+				'commit'  => 'abc1234',
+				'message' => 'Docs: Did something',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 400, $response->get_status() );
 		$data = $response->get_data();
@@ -71,16 +85,22 @@ class TestRestAPI extends WP_UnitTestCase {
 
 	public function test_create_result_invalid_message() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
-		$request->set_body_params( array(
-			'results' => json_encode( array(
-				'failures' => 5,
-			) ),
-			'commit' => '1234',
-			'message' => '',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => json_encode(
+					array(
+						'failures' => 5,
+					)
+				),
+				'commit'  => '1234',
+				'message' => '',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 400, $response->get_status() );
 		$data = $response->get_data();
@@ -91,17 +111,21 @@ class TestRestAPI extends WP_UnitTestCase {
 	public function test_create_result_success() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
-		$request->set_body_params( array(
-			'results' => '{"failures": "5"}',
-			'commit' => '1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => '{"failures": "5"}',
+				'commit'  => '1234',
+				'message' => 'Docs: Did something',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 
 		$response = $this->server->dispatch( $request );
-		$data = $response->get_data();
+		$data     = $response->get_data();
 		$this->assertEquals( 201, $response->get_status() );
 
 		$this->assertTrue( isset( $data['id'] ) );
@@ -120,56 +144,70 @@ class TestRestAPI extends WP_UnitTestCase {
 		$results = get_children( $args );
 
 		$this->assertEquals( 1, count( $results ) );
-		$result = array_pop( $results );
+		$result  = array_pop( $results );
 		$post_id = $result->ID;
-		$env = get_post_meta( $post_id, 'env', true );
+		$env     = get_post_meta( $post_id, 'env', true );
 		$results = get_post_meta( $post_id, 'results', true );
 
 		$this->assertEquals( '7.1', $env['php_version'] );
-		$this->assertEquals( array(
-			'failures' => '5',
-		), $results );
+		$this->assertEquals(
+			array(
+				'failures' => '5',
+			), $results
+		);
 	}
 
 	public function test_update_result_success_update_existing() {
 		$request = new WP_REST_Request( 'POST', '/wp-unit-test-api/v1/results' );
 
-		$request->set_body_params( array(
-			'results' => '{"failures": "1"}',
-			'commit' => '1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => '{"failures": "1"}',
+				'commit'  => '1234',
+				'message' => 'Docs: Did something',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 201, $response->get_status() );
-		$data = $response->get_data();
+		$data    = $response->get_data();
 		$post_id = $data['id'];
 
 		$results = get_post_meta( $post_id, 'results', true );
-		$this->assertEquals( array(
-			'failures' => '1',
-		), $results );
+		$this->assertEquals(
+			array(
+				'failures' => '1',
+			), $results
+		);
 
 		// Make second request.
-		$request->set_body_params( array(
-			'results' => '{"failures": "0"}',
-			'commit' => '1234',
-			'message' => 'Docs: Did something',
-			'env' => json_encode( array(
-				'php_version' => '7.1',
-			) ),
-		) );
+		$request->set_body_params(
+			array(
+				'results' => '{"failures": "0"}',
+				'commit'  => '1234',
+				'message' => 'Docs: Did something',
+				'env'     => json_encode(
+					array(
+						'php_version' => '7.1',
+					)
+				),
+			)
+		);
 
 		$this->server->dispatch( $request );
 		$this->assertEquals( 201, $response->get_status() );
 
 		$results = get_post_meta( $post_id, 'results', true );
-		$this->assertEquals( array(
-			'failures' => '0',
-		), $results );
+		$this->assertEquals(
+			array(
+				'failures' => '0',
+			), $results
+		);
 	}
 
 	public function tearDown() {
