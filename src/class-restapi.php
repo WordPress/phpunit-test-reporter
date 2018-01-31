@@ -181,12 +181,12 @@ class RestAPI {
 		}
 		$wporgbot_id = $user->ID;
 
-		$args = array(
+		$args             = array(
 			'post_parent' => $parent_id,
 			'post_type'   => 'result',
 			'numberposts' => -1,
 		);
-		$results = get_posts( $args );
+		$results          = get_posts( $args );
 		$wpdevbot_results = wp_filter_object_list( $results, array( 'post_author' => $wporgbot_id ) );
 		// 'wpdevbot' hasn't reported yet
 		if ( empty( $wpdevbot_results ) ) {
@@ -207,7 +207,7 @@ class RestAPI {
 				$user = get_user_by( 'id', $result->post_author );
 				if ( $user ) {
 					$subject = '[Host Test Results] Test failure for ' . $result->post_name;
-					$body = 'Hi there,' . PHP_EOL . PHP_EOL
+					$body    = 'Hi there,' . PHP_EOL . PHP_EOL
 						. "We've detected a WordPress PHPUnit test failure. Please review when you have a moment: "
 						. get_permalink( $result->ID ) . PHP_EOL . PHP_EOL
 						. 'Thanks,' . PHP_EOL . PHP_EOL
