@@ -193,22 +193,26 @@ class RestAPI {
 			return;
 		}
 		$wpdevbot_result = array_shift( $wpdevbot_results );
-		// If 'wpdevbot' is failed, we don't care to report to others.
+		// If 'wpdevbot' is failed, we already know the test failure
+		// and don't need to report host testing bots failures.
 		if ( self::is_failed_result( $wpdevbot_result ) ) {
 			return;
 		}
 
 		foreach ( $results as $result ) {
+			// Doesn't make sense to report wpdevbot to itself
 			if ( $wpdevbot_result->ID === $result->ID ) {
 				continue;
 			}
+			// If the test result is failed and we haven't yet sent an
+			// email notification, then let the reporter know.
 			if ( self::is_failed_result( $result )
 				&& ! get_post_meta( $result->ID, 'ptr_reported_failure', true ) ) {
 				$user = get_user_by( 'id', $result->post_author );
 				if ( $user ) {
 					$subject = '[Host Test Results] Test failure for ' . $result->post_name;
 					$body    = 'Hi there,' . PHP_EOL . PHP_EOL
-						. "We've detected a WordPress PHPUnit test failure. Please review when you have a moment: "
+						. "We've detected a WordPress PHPUnit test failure on your hosting environment. Please review when you have a moment: "
 						. get_permalink( $result->ID ) . PHP_EOL . PHP_EOL
 						. 'Thanks,' . PHP_EOL . PHP_EOL
 						. 'WordPress.org Hosting Community';
