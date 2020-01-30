@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:     PHPUnit Test Reporter
- * Plugin URI:      https://make.wordpress.org/hosting/phpunit-test-results/
+ * Plugin URI:      https://make.wordpress.org/hosting/test-results/
  * Description:     Captures and displays test results from the PHPUnit Test Runner
  * Author:          WordPress Hosting Community
  * Author URI:      https://make.wordpress.org/hosting/
