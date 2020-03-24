@@ -153,7 +153,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals(
 			array(
 				'failures' => '5',
-			), $results
+			),
+			$results
 		);
 	}
 
@@ -182,7 +183,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals(
 			array(
 				'failures' => '1',
-			), $results
+			),
+			$results
 		);
 
 		// Make second request.
@@ -206,7 +208,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals(
 			array(
 				'failures' => '0',
-			), $results
+			),
+			$results
 		);
 	}
 

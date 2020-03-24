@@ -67,13 +67,15 @@ class Display {
 
 		if ( get_queried_object()->post_parent ) {
 			$content = ptr_get_template_part(
-				'single-result', array(
+				'single-result',
+				array(
 					'report' => get_queried_object(),
 				)
 			);
 		} else {
 			$content = ptr_get_template_part(
-				'result-set', array(
+				'result-set',
+				array(
 					'revisions' => array(
 						get_queried_object(),
 					),
@@ -118,7 +120,8 @@ class Display {
 			$output .= self::get_reporter_avatars();
 		}
 		$output .= ptr_get_template_part(
-			'result-set', array(
+			'result-set',
+			array(
 				'revisions' => $rev_query->posts,
 			)
 		);

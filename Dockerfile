@@ -1,11 +1,11 @@
 # Start with the latest WordPress image.
-FROM wordpress:4.7.3
+FROM wordpress:5.3.2-php7.4
 
 # Set up nodejs PPA
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
 
 # Install server dependencies.
-RUN apt-get update && apt-get install -qq -y php5-mysql nodejs build-essential pkg-config libcairo2-dev libjpeg-dev libgif-dev git subversion mysql-client zip unzip vim libyaml-dev --fix-missing --no-install-recommends
+RUN apt-get update && apt-get install -qq -y nodejs build-essential pkg-config libcairo2-dev libjpeg-dev libgif-dev git subversion default-mysql-client zip unzip vim libyaml-dev --fix-missing --no-install-recommends
 
 COPY bin/install-wp-tests.sh /
 RUN cat /install-wp-tests.sh | bash /dev/stdin wordpress root password mysql latest true
@@ -26,6 +26,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 ENV PATH="/root/.composer/vendor/bin::${PATH}"
 
 RUN composer global require "phpunit/phpunit=5.7.*"
-RUN composer global require "squizlabs/php_codesniffer=2.9.*"
+RUN composer global require "dealerdirect/phpcodesniffer-composer-installer"
 RUN composer global require wp-coding-standards/wpcs
 RUN phpcs --config-set installed_paths /root/.composer/vendor/wp-coding-standards/wpcs
