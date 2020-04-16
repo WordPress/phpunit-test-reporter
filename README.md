@@ -1,8 +1,8 @@
 # PHPUnit Test Reporter #
-**Contributors:** octalmage, danielbachhuber, wpamitkumar, mikeschroder, pfefferle
+**Contributors:** octalmage, danielbachhuber, wpamitkumar, mikeschroder, pfefferle  
 **Tags:** phpunit  
 **Requires at least:** 4.7  
-**Tested up to:** 5.3.2
+**Tested up to:** 5.3.2  
 **Stable tag:** 0.1.0  
 **License:** GPLv3  
 **License URI:** http://www.gnu.org/licenses/gpl-3.0.html  
