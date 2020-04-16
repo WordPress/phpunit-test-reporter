@@ -94,7 +94,7 @@ class Display {
 
 		$output     = '';
 		$query_args = array(
-			'posts_per_page' => 5,
+			'posts_per_page' => 3,
 			'post_type'      => 'result',
 			'post_parent'    => 0,
 			'orderby'        => 'post_name',
