@@ -23,7 +23,7 @@ echo Display::get_display_css(); ?>
 			</tr>
 			<?php
 			$query_args   = array(
-				'posts_per_page' => -1,
+				'posts_per_page' => $posts_per_page,
 				'post_type'      => 'result',
 				'post_parent'    => $revision->ID,
 				'orderby'        => 'post_title',
