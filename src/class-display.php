@@ -76,7 +76,7 @@ class Display {
 			$content = ptr_get_template_part(
 				'result-set',
 				array(
-					'posts_per_page' => -1,
+					'posts_per_page' => 500,
 					'revisions'      => array(
 						get_queried_object(),
 					),
@@ -123,7 +123,7 @@ class Display {
 		$output .= ptr_get_template_part(
 			'result-set',
 			array(
-				'posts_per_page' => 15,
+				'posts_per_page' => 50,
 				'revisions'      => $rev_query->posts,
 			)
 		);
