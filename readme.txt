@@ -2,8 +2,8 @@
 Contributors: octalmage, danielbachhuber, mikeschroder, pfefferle
 Tags: phpunit
 Requires at least: 4.7
-Tested up to: 5.3.2
-Stable tag: 0.1.0
+Tested up to: 5.4.1
+Stable tag: 0.1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,3 +31,9 @@ Usage:
 
 = 0.1.0 (August 21st, 2017) =
 * Initial release.
+
+= 0.1.1 (May 12th, 2020) =
+* Updates for coding standards.
+* Update local and Travis CI builds.
+* Reduce number of revisions in index, while increasing max reporters shown.
+* Add contributor documentation.
