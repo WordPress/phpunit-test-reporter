@@ -1,6 +1,6 @@
 {
   "name": "phpunit-test-reporter",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/wordpress/phpunit-test-reporter.git"
@@ -8,7 +8,7 @@
   "main": "Gruntfile.js",
   "author": "WordPress Hosting Community <noreply@wordpress.org>",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-wp-readme-to-markdown": "~1.0.0"
+    "grunt": "^1.1.0",
+    "grunt-wp-readme-to-markdown": "^2.0.1"
   }
 }

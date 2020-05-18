@@ -1,5 +1,5 @@
 # Start with the latest WordPress image.
-FROM wordpress:5.3.2-php7.4
+FROM wordpress:5.4.1-php7.4
 
 # Set up nodejs PPA
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
