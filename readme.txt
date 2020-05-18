@@ -1,9 +1,9 @@
 === PHPUnit Test Reporter ===
-Contributors: octalmage, danielbachhuber, mikeschroder, pfefferle
+Contributors: octalmage, danielbachhuber, wpamitkumar, mikeschroder, pfefferle
 Tags: phpunit
 Requires at least: 4.7
 Tested up to: 5.4.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -27,6 +27,14 @@ Usage:
 - `make shell`: SSH to Docker test environment.
 - `make test`: Runs `php-unit` and `phpcs` in Docker test environment.
 
+There is also a [Grunt](https://gruntjs.com/) command for updating the `README.md` file for Github
+after updating `readme.txt`.
+
+Usage:
+- `npm install`: Installs necessary dependencies.
+- `grunt readme`: Generates `README.md` with
+  `[grunt-wp-readme-to-markdown](https://github.com/stephenharris/wp-readme-to-markdown)`.
+
 == Changelog ==
 
 = 0.1.0 (August 21st, 2017) =
@@ -37,3 +45,11 @@ Usage:
 * Update local and Travis CI builds.
 * Reduce number of revisions in index, while increasing max reporters shown.
 * Add contributor documentation.
+
+= 0.1.2 (May 18th, 2020) =
+* Only report result status when tests were actually run. Port of
+  [meta #7227](https://meta.trac.wordpress.org/changeset/7227) to plugin.
+* Upgrade packages for `grunt readme` to Grunt ^1.1.0 and
+  grunt-wp-readme-to-markdown ^2.0.1, and update plugin version in `package.json`.
+* Upgrade Docker environment to use `wordpress:5.4.1-php7.4` image.
+* Correct contributor list in `readme.txt` and update `README.md`.
