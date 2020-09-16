@@ -3,7 +3,7 @@ Contributors: octalmage, danielbachhuber, wpamitkumar, mikeschroder, pfefferle
 Tags: phpunit
 Requires at least: 4.7
 Tested up to: 5.4.1
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -53,3 +53,6 @@ Usage:
   grunt-wp-readme-to-markdown ^2.0.1, and update plugin version in `package.json`.
 * Upgrade Docker environment to use `wordpress:5.4.1-php7.4` image.
 * Correct contributor list in `readme.txt` and update `README.md`.
+
+= 0.1.3 (September 16th, 2020) =
+* Check for failures and errors on the error report page: https://github.com/WordPress/phpunit-test-reporter/pull/84
