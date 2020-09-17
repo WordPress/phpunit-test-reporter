@@ -12,7 +12,7 @@ shell:
 	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; /bin/bash"
 
 test:
-	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; phpcs --standard=phpcs.xml.dist ./ && phpunit"
+	docker-compose exec wordpress /bin/bash -c "cd /var/www/html/wp-content/plugins/wp-unit-test-reporter/; phpcs --standard=phpcs.xml.dist --ignore=build ./ && phpunit"
 
 metadiff:
 	if [ -d "./build/wordpress.org" ]; then \
