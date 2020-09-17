@@ -1,8 +1,8 @@
 # Start with the latest WordPress image.
-FROM wordpress:5.4.1-php7.4
+FROM wordpress:5.5.1-php7.4
 
 # Set up nodejs PPA
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
 
 # Install server dependencies.
 RUN apt-get update && apt-get install -qq -y nodejs build-essential pkg-config libcairo2-dev libjpeg-dev libgif-dev git subversion default-mysql-client zip unzip vim libyaml-dev --fix-missing --no-install-recommends
