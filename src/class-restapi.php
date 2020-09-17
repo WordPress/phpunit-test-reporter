@@ -21,7 +21,7 @@ class RestAPI {
 					'commit'  => array(
 						'required'          => true,
 						'description'       => 'The SVN commit changeset number.',
-						'type'              => 'numeric',
+						'type'              => 'number',
 						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'results' => array(
