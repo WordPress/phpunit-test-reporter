@@ -55,4 +55,4 @@ Usage:
 * Correct contributor list in `readme.txt` and update `README.md`.
 
 ### 0.1.3 (September 16th, 2020) ###
-* Include errors along with failures on the error report page ([PR](https://github.com/WordPress/phpunit-test-reporter/pull/84))
+* Include errors along with failures on the error report page ([PR](https://github.com/WordPress/phpunit-test-reporter/pull/84)).
