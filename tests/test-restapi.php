@@ -80,7 +80,7 @@ class TestRestAPI extends WP_UnitTestCase {
 		$this->assertEquals( 400, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 'Invalid parameter(s): commit', $data['message'] );
-		$this->assertEquals( 'commit is not of type number.', $data['data']['params']['commit'] );
+		$this->assertEquals( 'commit is not of type integer.', $data['data']['params']['commit'] );
 	}
 
 	public function test_create_result_invalid_message() {

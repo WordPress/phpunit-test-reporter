@@ -21,7 +21,7 @@ class RestAPI {
 					'commit'  => array(
 						'required'    => true,
 						'description' => 'The SVN commit changeset number.',
-						'type'        => 'number',
+						'type'        => 'integer',
 					),
 					'results' => array(
 						'required'          => true,
