@@ -2,7 +2,7 @@
 **Contributors:** [octalmage](https://profiles.wordpress.org/octalmage), [danielbachhuber](https://profiles.wordpress.org/danielbachhuber), [wpamitkumar](https://profiles.wordpress.org/wpamitkumar), [mikeschroder](https://profiles.wordpress.org/mikeschroder), [pfefferle](https://profiles.wordpress.org/pfefferle)  
 **Tags:** phpunit  
 **Requires at least:** 4.7  
-**Tested up to:** 5.4.1  
+**Tested up to:** 5.5  
 **Stable tag:** 0.1.3  
 **License:** GPLv3  
 **License URI:** http://www.gnu.org/licenses/gpl-3.0.html  
@@ -56,3 +56,4 @@ Usage:
 
 ### 0.1.3 (September 16th, 2020) ###
 * Include errors along with failures on the error report page ([PR](https://github.com/WordPress/phpunit-test-reporter/pull/84)).
+* Change to `integer` built-in type for `commit` field, following updates in WordPress 5.5.
