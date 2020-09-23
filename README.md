@@ -54,6 +54,6 @@ Usage:
 * Upgrade Docker environment to use `wordpress:5.4.1-php7.4` image.
 * Correct contributor list in `readme.txt` and update `README.md`.
 
-### 0.1.3 (September 16th, 2020) ###
+### 0.1.3 (September 23th, 2020) ###
 * Include errors along with failures on the error report page ([PR](https://github.com/WordPress/phpunit-test-reporter/pull/84)).
 * Change to `integer` built-in type for `commit` field, following updates in WordPress 5.5.
