@@ -29,3 +29,9 @@ Usage:
 - `npm install`: Installs necessary dependencies.
 - `grunt readme`: Generates `README.md` with
   [`grunt-wp-readme-to-markdown`](https://github.com/stephenharris/wp-readme-to-markdown).
+  
+## Coding Standards
+This project follows the [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards), and automatic checking is built into the automated tests.
+
+This means you can check locally with `make test` before submitting a PR, or on your fork/branch of the GitHub repo with TravisCI.
+
