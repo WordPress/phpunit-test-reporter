@@ -1,4 +1,4 @@
-== Contributing Guidelines ==
+# Contributing Guidelines
 
 Thank you for considering contributing to the [WordPress PHPUnit Test Reporter](https://make.wordpress.org/hosting/test-results)! If you're unsure of anything, know that you're 💯 welcome to [submit an issue](https://github.com/phpunit-test-reporter/issues) or [pull request](https://github.com/phpunit-test-reporter/pulls) on any topic. The worst that can happen is that you'll be politely directed to the best location to ask your question or to change something in your pull request. We appreciate any sort of contribution and don't want a wall of rules to get in the way of that.
 
