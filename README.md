@@ -13,27 +13,14 @@ Captures and displays test results from the PHPUnit Test Runner
 
 Captures and displays test results from the [PHPUnit Test Runner](https://github.com/WordPress/phpunit-test-runner).
 
+This is the plugin that receives and generates the results displayed on https://make.wordpress.org/hosting/test-results.
+
 For more details, [please read through the project overview](https://make.wordpress.org/hosting/test-results-getting-started/).
 
 ## Contributing ##
 
-There’s a Docker environment with several tools built in for testing.
-To configure it, run `make` and it will automatically run `docker-compose`.
-After that, to view the test environment, visit http://localhost:8080.
-
-Usage:
-- `make` or `make start`:  Builds a Docker environment for testing.
-- `make stop`: Stops Docker test environment.
-- `make shell`: SSH to Docker test environment.
-- `make test`: Runs `php-unit` and `phpcs` in Docker test environment.
-
-There is also a [Grunt](https://gruntjs.com/) command for updating the `README.md` file for Github
-after updating `readme.txt`.
-
-Usage:
-- `npm install`: Installs necessary dependencies.
-- `grunt readme`: Generates `README.md` with
-  `[grunt-wp-readme-to-markdown](https://github.com/stephenharris/wp-readme-to-markdown)`.
+Contributors are welcome!
+Check out the [contribution guidelines](https://github.com/WordPress/phpunit-test-reporter/blob/master/CONTRIBUTING.md) for details, including how to use the build/testing tools.
 
 ## Changelog ##
 
