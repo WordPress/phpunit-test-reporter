@@ -406,4 +406,45 @@ class Display {
 
 	}
 
+	/**
+	 * Get the GD image support for display.
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	private static function get_display_gd_image_support( $report_id ) {
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( empty( $env['gd_info'] ) ) {
+			return 'unavailable';
+		}
+
+		$output = '<ul class="ptr-test-reporter-list">';
+
+		foreach ( $image_data as $key=>$data_point ) {
+			$output .= sprintf( '<li>%s: %s</li>', esc_html( $key ), esc_html( $value ) );
+		}
+
+		$output .= '</ul>';
+		return $output;
+	}
+
+	/**
+	 * Get the Imagick image support for display.
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	private static function get_display_imagick_image_support( $report_id ) {
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( empty( $env['imagick_info'] ) ) {
+			return 'unavailable';
+		}
+
+		$output = '<ul class="ptr-test-reporter-list">';
+
+		$output .= sprintf( '<li>Supported formats: %s</li>', implode( ', ',  $env['imagick_info'] ) );
+
+		$output .= '</ul>';
+		return $output;
+	}
 }
