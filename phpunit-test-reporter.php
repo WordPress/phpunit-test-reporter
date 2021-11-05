@@ -44,9 +44,8 @@ function ptr_load_edit_php() {
 		return;
 	}
 
-	// Load the core class.
-	_get_list_table( 'WP_Posts_List_Table' );
-	require_once dirname( __FILE__ ) . '/src/class-posts-list-table.php';
+	require_once ABSPATH . 'wp-admin/includes/class-wp-posts-list-table.php';
+	require_once __DIR__ . '/src/class-posts-list-table.php';
 
 	add_action( 'parse_request', 'ptr_override_results_list_table' );
 }
