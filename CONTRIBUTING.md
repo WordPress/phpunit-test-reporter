@@ -2,7 +2,7 @@
 
 Thank you for considering contributing to the [WordPress PHPUnit Test Reporter](https://make.wordpress.org/hosting/test-results)! If you're unsure of anything, know that you're 💯 welcome to [submit an issue](https://github.com/phpunit-test-reporter/issues) or [pull request](https://github.com/phpunit-test-reporter/pulls) on any topic. The worst that can happen is that you'll be politely directed to the best location to ask your question or to change something in your pull request. We appreciate any sort of contribution and don't want a wall of rules to get in the way of that.
 
-As with all WordPress projects, we want to ensure a welcoming environment for everyone. With that in mind, all contributors are expected to follow our [Code of Conduct](/CODE_OF_CONDUCT.md).
+As with all WordPress projects, we want to ensure a welcoming environment for everyone. With that in mind, all contributors are expected to follow our [Code of Conduct](https://make.wordpress.org/handbook/community-code-of-conduct/).
 
 This project is licensed [GPLv3](/LICENSE), and all contributions to this project will be released under the GPLv3 license. You maintain copyright over any contribution you make, and by submitting a pull request, you are agreeing to release that contribution under the GPLv3 license.
 
