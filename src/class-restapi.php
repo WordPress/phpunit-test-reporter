@@ -113,22 +113,40 @@ class RestAPI {
 			);
 		}
 
+		$env = isset( $parameters['env'] ) ? json_decode( $parameters['env'], true ) : array();
+
+		$php_version = '';
+		if ( isset( $env['php_version'] ) ) {
+			$parts = explode( '.', $env['php_version'] );
+			$php_version = $parts[0] . '.' . $parts[1];
+		}
+
 		$current_user = wp_get_current_user();
 
-		$args = array(
+		// Check to see if the test result already exist.
+		$results = get_posts( array(
 			'post_parent' => $parent_id,
 			'post_type'   => 'result',
 			'numberposts' => 1,
 			'author'      => $current_user->ID,
-		);
-
-		// Check to see if the test result already exist.
-		$results = get_posts( $args );
+			'meta_query'  => $php_version ? array(
+				array(
+					'key'   => 'php_version',
+					'value' => $php_version,
+				),
+			) : array(),
+		) );
 		if ( $results ) {
 			$post_id = $results[0]->ID;
 		} else {
-			$results = array(
-				'post_title'   => $current_user->user_login . ' - ' . $slug,
+			$post_title = $current_user->user_login . ' - ' . $slug;
+
+			if ( $php_version ) {
+				$post_title .= '-' . $php_version;
+			}
+
+			$args = array(
+				'post_title'   => $post_title,
 				'post_content' => '',
 				'post_status'  => 'publish',
 				'post_author'  => $current_user->ID,
@@ -137,7 +155,7 @@ class RestAPI {
 			);
 
 			// Store the results.
-			$post_id = wp_insert_post( $results, true );
+			$post_id = wp_insert_post( $args, true );
 		}
 
 		if ( is_wp_error( $post_id ) ) {
@@ -149,6 +167,7 @@ class RestAPI {
 
 		update_post_meta( $post_id, 'env', $env );
 		update_post_meta( $post_id, 'results', $results );
+		update_post_meta( $post_id, 'php_version', $php_version );
 
 		self::maybe_send_email_notifications( $parent_id );
 
