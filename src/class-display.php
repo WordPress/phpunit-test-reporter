@@ -74,7 +74,7 @@ class Display {
 			);
 		} else {
 			$content = ptr_get_template_part(
-				'result-set',
+				'result-set-single',
 				array(
 					'posts_per_page' => 500,
 					'revisions'      => array(
@@ -95,7 +95,7 @@ class Display {
 
 		$output     = '';
 		$query_args = array(
-			'posts_per_page' => 3,
+			'posts_per_page' => 20,
 			'post_type'      => 'result',
 			'post_parent'    => 0,
 			'orderby'        => 'post_name',
@@ -121,7 +121,7 @@ class Display {
 			$output .= self::get_reporter_avatars();
 		}
 		$output .= ptr_get_template_part(
-			'result-set',
+			'result-set-all',
 			array(
 				'posts_per_page' => 50,
 				'revisions'      => $rev_query->posts,
@@ -142,7 +142,7 @@ class Display {
 		ob_start();
 		?>
 		<style>
-			a.ptr-status-badge {
+			.ptr-status-badge {
 				color: #FFF;
 				display: inline-block;
 				padding-left: 8px;
@@ -152,13 +152,13 @@ class Display {
 				border-radius: 3px;
 				font-weight: normal;
 			}
-			a.ptr-status-badge-passed {
+			.ptr-status-badge-passed {
 				background-color: #39BC00;
 			}
-			a.ptr-status-badge-failed {
+			.ptr-status-badge-failed {
 				background-color: #CD543A;
 			}
-			a.ptr-status-badge-errored {
+			.ptr-status-badge-errored {
 				background-color: #909090;
 			}
 			.pagination-centered {
