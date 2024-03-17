@@ -233,6 +233,7 @@ class Display {
 				font-weight: 600;
 				margin-top: 6px;
 				margin-bottom: 6px;
+				text-transform: none;
 			}
 			.ptr-test-reporter-list.ptr-test-reporter-inactive li h5.avatar-name {
 				font-size: 11px;
