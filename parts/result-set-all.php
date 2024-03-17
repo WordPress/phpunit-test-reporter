@@ -7,7 +7,7 @@ echo Display::get_display_css(); ?>
 	<thead>
 		<tr>
 			<th style="width:100px">Revision</th>
-			<th style="width:100px">Hosts</th>
+			<th style="width:100px">Environments</th>
 			<th style="width:100px">Passed</th>
 			<th style="width:100px">Failed</th>
 			<th style="width:100px">➡️</th>
@@ -27,23 +27,25 @@ echo Display::get_display_css(); ?>
       );
       $report_query = new WP_Query( $query_args );
 
-      $hosts = [];
+      $environments = [];
       $num_hosts = 0;
       $num_passed = 0;
       $num_failed = 0;
 
-      foreach ( $report_query->posts as $report ) :
-          $hosts[ $report->post_author ] ??= 0;
-		      ++$hosts[ $report->post_author ];
+      foreach ( $report_query->posts as $report ) {
+				$env = Display::get_display_environment_name($report->ID);
 
-          $results = get_post_meta( $report->ID, 'results', true );
+				$environments[$env] ??= 0;
+				++$environments[$env];
 
-          if ( 0 === (int) $results['failures'] && 0 === (int) $results['errors'] ) {
-            ++$num_passed;
-          } else {
-            ++$num_failed;
-          }
-        endforeach;
+				$results = get_post_meta($report->ID, 'results', true);
+
+				if (0 === (int)$results['failures'] && 0 === (int)$results['errors']) {
+					++$num_passed;
+				} else {
+					++$num_failed;
+				}
+			}
 			?>
 			<tr>
 				<td>
@@ -54,7 +56,7 @@ echo Display::get_display_css(); ?>
           </a>
         </td>
         <td style="text-align:center">
-          <?php echo count( $hosts ); ?>
+          <?php echo count( $environments ); ?>
         </td>
         <td style="text-align:center">
             <span class="ptr-status-badge ptr-status-badge-passed">

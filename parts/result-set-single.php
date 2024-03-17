@@ -28,12 +28,30 @@ foreach ( $revisions as $revision ) :
 	<tbody>
 
 			<?php
-			$query_args   = array(
+			$query_args = array(
 				'posts_per_page' => $posts_per_page,
 				'post_type'      => 'result',
 				'post_parent'    => $revision->ID,
-				'orderby'        => ['post_title' => 'ASC', 'author' => 'ASC', 'meta_value' => 'ASC'],
-//        'meta_key'       => 'php_version',
+				'orderby'        => [ 'author' => 'ASC', 'php_version_clause' => 'ASC' ],
+				'meta_query'     => array(
+					'relation' => 'OR',
+					'php_version_clause' =>	array(
+						'key'     => 'php_version',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'php_version',
+						'compare' => 'NOT EXISTS',
+					),
+					'env_name_clause' => array(
+						'key'     => 'environment_name',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'environment_name',
+						'compare' => 'NOT EXISTS',
+					)
+				),
 			);
 			$report_query = new WP_Query( $query_args );
 			if ( ! empty( $report_query->posts ) ) :
@@ -70,13 +88,14 @@ foreach ( $revisions as $revision ) :
 						if ( ! empty( $user->user_url ) ) {
 							$host .= '<a target="_blank" rel="nofollow" href="' . esc_url( $user->user_url ) . '">';
 						}
-						$host .= $user->display_name;
+						$host .= Display::get_display_environment_name( $report->ID );
+
 						if ( ! empty( $user->user_url ) ) {
 							$host .= '</a>';
 						}
 					}
 					?>
-        <?php if ( $prev_author !== $report->post_author ): ?>
+        <?php if ( $prev_author !== $host ): ?>
           <tr>
             <td colspan="3">
               <?php echo wp_kses_post( $host ); ?>
@@ -89,7 +108,7 @@ foreach ( $revisions as $revision ) :
 					<td><?php echo esc_html( Display::get_display_mysql_version( $report->ID ) ); ?></td>
 				</tr>
 					<?php
-			    $prev_author = $report->post_author;
+			    $prev_author = $host;
 				endforeach;
 			else :
 				?>

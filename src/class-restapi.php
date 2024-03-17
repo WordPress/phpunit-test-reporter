@@ -121,7 +121,27 @@ class RestAPI {
 			$php_version = $parts[0] . '.' . $parts[1];
 		}
 
+		$env_name = $env['label'] ?? '';;
+
 		$current_user = wp_get_current_user();
+
+		$meta_query = [
+			'relation' => 'AND'
+		];
+
+		if ( $php_version ) {
+			$meta_query[] = array(
+				'key'   => 'php_version',
+				'value' => $php_version,
+			);
+		}
+
+		if ( $env_name ) {
+			$meta_query[] = array(
+				'key'   => 'environment_name',
+				'value' => $env_name,
+			);
+		}
 
 		// Check to see if the test result already exist.
 		$results = get_posts( array(
@@ -129,17 +149,16 @@ class RestAPI {
 			'post_type'   => 'result',
 			'numberposts' => 1,
 			'author'      => $current_user->ID,
-			'meta_query'  => $php_version ? array(
-				array(
-					'key'   => 'php_version',
-					'value' => $php_version,
-				),
-			) : array(),
+			'meta_query'  => $meta_query,
 		) );
 		if ( $results ) {
 			$post_id = $results[0]->ID;
 		} else {
 			$post_title = $current_user->user_login . ' - ' . $slug;
+
+			if ( $env_name ) {
+				$post_title .= '-' . $env_name;
+			}
 
 			if ( $php_version ) {
 				$post_title .= '-' . $php_version;
@@ -168,6 +187,7 @@ class RestAPI {
 		update_post_meta( $post_id, 'env', $env );
 		update_post_meta( $post_id, 'results', $results );
 		update_post_meta( $post_id, 'php_version', $php_version );
+		update_post_meta( $post_id, 'environment_name', $env_name );
 
 		self::maybe_send_email_notifications( $parent_id );
 

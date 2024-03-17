@@ -329,6 +329,29 @@ class Display {
 	}
 
 	/**
+	 * Get the environment name for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_environment_name( $report_id ) {
+		$report = get_post( $report_id );
+		$host = 'Unknown';
+		$user = get_user_by( 'id', $report->post_author );
+
+		if ( $user ) {
+			$host = $user->display_name;
+		}
+
+		$env = get_post_meta( $report_id, 'environment_name', true );
+		if ( ! empty( $env ) ) {
+			$host .= ' (' . $env . ')';
+		}
+
+		return $host;
+	}
+
+	/**
 	 * Get the extensions list for display
 	 *
 	 * @param integer $report_id Report ID.
