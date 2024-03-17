@@ -1,5 +1,5 @@
 # Start with the latest WordPress image.
-FROM wordpress:5.5.1-php7.4
+FROM wordpress:php8.1
 
 # Set up nodejs PPA
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
@@ -25,7 +25,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
 ENV PATH="/root/.composer/vendor/bin::${PATH}"
 
-RUN composer global require "phpunit/phpunit=5.7.*"
+RUN composer global require "phpunit/phpunit=8.*"
 RUN composer global require "dealerdirect/phpcodesniffer-composer-installer"
 RUN composer global require wp-coding-standards/wpcs
 RUN phpcs --config-set installed_paths /root/.composer/vendor/wp-coding-standards/wpcs
