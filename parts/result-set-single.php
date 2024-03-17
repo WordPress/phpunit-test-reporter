@@ -85,7 +85,7 @@ foreach ( $revisions as $revision ) :
 							$host .= '</a>';
 						}
 
-						$host .= '<a target="_blank" rel="nofollow" href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';
+						$host .= '<a href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';
 						$host .= Display::get_display_environment_name( $report->ID );
 						$host .= '</a>';
 					}

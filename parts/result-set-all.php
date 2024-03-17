@@ -15,7 +15,6 @@ echo Display::get_display_css(); ?>
 	</thead>
 	<tbody>
 		<?php
-		$total_cols = 5;
 		foreach ( $revisions as $revision ) :
 			$rev_id = (int) ltrim( $revision->post_name, 'r' );
       $query_args   = array(
