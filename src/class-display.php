@@ -92,6 +92,20 @@ class Display {
 	 * Render the test results.
 	 */
 	public static function render_results( $atts ) {
+		$current_user = null;
+
+		if ( is_author() ) {
+			/**
+			 * @var \WP_User|null $current_user
+			 */
+			$current_user = $GLOBALS['authordata'];
+
+			if ( $current_user ) {
+				if ( ! in_array( 'test-reporter', $current_user->roles, true ) ) {
+					return '';
+				}
+			}
+		}
 
 		$output     = '';
 		$query_args = array(
@@ -117,16 +131,31 @@ class Display {
 			return $output;
 		}
 		$output .= self::get_display_css();
-		if ( $paged <= 1 ) {
-			$output .= self::get_reporter_avatars();
+
+		if ( is_author() ) {
+			if ( $current_user ) {
+				$output .= ptr_get_template_part(
+						'result-set-single',
+						array(
+								'posts_per_page' => 50,
+								'revisions' => $rev_query->posts,
+								'post_author' => $current_user->ID,
+						)
+				);
+			}
+		} else {
+			if ($paged <= 1) {
+				$output .= self::get_reporter_avatars();
+			}
+
+			$output .= ptr_get_template_part(
+					'result-set-all',
+					array(
+							'posts_per_page' => 50,
+							'revisions' => $rev_query->posts,
+					)
+			);
 		}
-		$output .= ptr_get_template_part(
-			'result-set-all',
-			array(
-				'posts_per_page' => 50,
-				'revisions'      => $rev_query->posts,
-			)
-		);
 		ob_start();
 		self::pagination( $rev_query );
 		$output .= ob_get_clean();
@@ -143,7 +172,8 @@ class Display {
 		?>
 		<style>
 			.ptr-status-badge {
-				color: #FFF;
+				color: #fff !important;
+				text-decoration: none !important;
 				display: inline-block;
 				padding-left: 8px;
 				padding-right: 8px;
@@ -172,6 +202,15 @@ class Display {
 			}
 			.pagination-centered ul.pagination li a {
 				cursor: pointer;
+			}
+			.ptr-test-reporter-table th {
+				text-align: center;
+			}
+			.ptr-test-reporter-table td {
+				text-align: center;
+			}
+			.ptr-test-reporter-table td[colspan] {
+				text-align: left;
 			}
 			.ptr-test-reporter-list {
 				list-style-type: none;

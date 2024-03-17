@@ -8,17 +8,15 @@ foreach ( $revisions as $revision ) :
   $rev_id = (int) ltrim( $revision->post_name, 'r' );
 ?>
 
-<table>
+
+<div class="ptr-test-reporter-single-revision">
+	<a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>">
+		r<?php echo $rev_id; ?>
+	</a>: <?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>
+</div>
+
+<table class="ptr-test-reporter-table alignwide">
 	<thead>
-    <tr>
-      <td colspan="3">
-        <a
-            href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>"
-            title="<?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>">
-          r<?php echo $rev_id; ?>
-        </a>
-      </td>
-    </tr>
 		<tr>
 			<th style="width:100px">Status</th>
 			<th style="width:150px">PHP Version</th>
@@ -30,6 +28,7 @@ foreach ( $revisions as $revision ) :
 			<?php
 			$query_args = array(
 				'posts_per_page' => $posts_per_page,
+				'author'         => $post_author ?? null,
 				'post_type'      => 'result',
 				'post_parent'    => $revision->ID,
 				'orderby'        => [ 'author' => 'ASC', 'php_version_clause' => 'ASC' ],
@@ -85,14 +84,10 @@ foreach ( $revisions as $revision ) :
 						if ( ! empty( $user->user_url ) ) {
 							$host .= '</a>';
 						}
-						if ( ! empty( $user->user_url ) ) {
-							$host .= '<a target="_blank" rel="nofollow" href="' . esc_url( $user->user_url ) . '">';
-						}
-						$host .= Display::get_display_environment_name( $report->ID );
 
-						if ( ! empty( $user->user_url ) ) {
-							$host .= '</a>';
-						}
+						$host .= '<a target="_blank" rel="nofollow" href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';
+						$host .= Display::get_display_environment_name( $report->ID );
+						$host .= '</a>';
 					}
 					?>
         <?php if ( $prev_author !== $host ): ?>
@@ -101,10 +96,13 @@ foreach ( $revisions as $revision ) :
               <?php echo wp_kses_post( $host ); ?>
             </td>
           </tr>
+
         <?php endif; ?>
 				<tr>
-					<td style="text-align:center"><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>"><?php echo esc_html( $status ); ?></a></td>
-					<td style="text-align:center"><?php echo esc_html( Display::get_display_php_version( $report->ID ) ); ?></td>
+					<td><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>">
+							<?php echo esc_html( $status ); ?></a>
+					</td>
+					<td><?php echo esc_html( Display::get_display_php_version( $report->ID ) ); ?></td>
 					<td><?php echo esc_html( Display::get_display_mysql_version( $report->ID ) ); ?></td>
 				</tr>
 					<?php
@@ -119,6 +117,6 @@ foreach ( $revisions as $revision ) :
 					</td>
 				</tr>
 			<?php endif; ?>
-		<?php endforeach; ?>
 	</tbody>
 </table>
+<?php endforeach;

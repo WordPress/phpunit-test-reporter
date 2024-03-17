@@ -3,7 +3,7 @@ use PTR\Display;
 
 echo Display::get_display_css(); ?>
 
-<table>
+<table class="ptr-test-reporter-table alignwide">
 	<thead>
 		<tr>
 			<th style="width:100px">Revision</th>
@@ -55,20 +55,20 @@ echo Display::get_display_css(); ?>
             r<?php echo $rev_id; ?>
           </a>
         </td>
-        <td style="text-align:center">
+        <td>
           <?php echo count( $environments ); ?>
         </td>
-        <td style="text-align:center">
+        <td>
             <span class="ptr-status-badge ptr-status-badge-passed">
 			        <?php echo $num_passed; ?>
             </span>
         </td>
-        <td style="text-align:center">
+        <td>
             <span class="ptr-status-badge ptr-status-badge-failed">
 			        <?php echo $num_failed; ?>
             </span>
         </td>
-        <td style="text-align:center">
+        <td>
           <a href="<?php the_permalink( $revision->ID ); ?>">
             View
           </a>
