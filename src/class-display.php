@@ -277,7 +277,6 @@ class Display {
 		$all_time_reporters = $wpdb->get_col( "SELECT DISTINCT post_author FROM {$wpdb->posts} WHERE post_type='result' AND post_status='publish' AND post_parent != 0" ); // @codingStandardsIgnoreLine
 		if ( ! empty( $all_time_reporters ) ) {
 			$all_time_reporters = array_map( 'intval', $all_time_reporters );
-			$output            .= '<h4>Registered, but no reports in >25 Revisions</h4>' . PHP_EOL;
 			$users              = get_users(
 				array(
 					'orderby' => 'display_name',
@@ -288,6 +287,9 @@ class Display {
 				if ( in_array( $user->ID, $active_reporters, true ) ) {
 					unset( $users[ $i ] );
 				}
+			}
+			if ( ! empty( $users ) ) {
+				$output .= '<h4>Registered, but no reports in >25 Revisions</h4>' . PHP_EOL;
 			}
 			$output .= self::get_user_list( $users, 'inactive' );
 		}
