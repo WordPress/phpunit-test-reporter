@@ -199,6 +199,7 @@ class Display {
 			}
 			.pagination-centered ul.pagination li {
 				display: inline-block;
+				margin: 0 5px;
 			}
 			.pagination-centered ul.pagination li a {
 				cursor: pointer;
