@@ -39,7 +39,7 @@ echo Display::get_display_css(); ?>
 
 				$results = get_post_meta($report->ID, 'results', true);
 
-				if (0 === (int)$results['failures'] && 0 === (int)$results['errors']) {
+				if (0 === (int) $results['failures'] && 0 === (int) $results['errors']) {
 					++$num_passed;
 				} else {
 					++$num_failed;
