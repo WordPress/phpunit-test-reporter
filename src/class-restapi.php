@@ -325,9 +325,6 @@ class RestAPI {
 			) {
 				$new_failures = self::get_new_failures( $result->ID );
 
-				$new_failures[] = 'Foo::bar';
-				$new_failures[] = 'Bar::baz';
-
 				if ( empty( $new_failures ) ) {
 					continue;
 				}
