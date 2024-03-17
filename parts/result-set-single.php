@@ -31,7 +31,7 @@ foreach ( $revisions as $revision ) :
 				'author'         => $post_author ?? null,
 				'post_type'      => 'result',
 				'post_parent'    => $revision->ID,
-				'orderby'        => [ 'author' => 'ASC', 'php_version_clause' => 'ASC' ],
+				'orderby'        => [ 'author' => 'ASC', 'env_name_clause' => 'ASC', 'php_version_clause' => 'ASC' ],
 				'meta_query'     => array(
 					'relation' => 'OR',
 					'php_version_clause' =>	array(
