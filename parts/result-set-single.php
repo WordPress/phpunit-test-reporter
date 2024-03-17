@@ -99,8 +99,10 @@ foreach ( $revisions as $revision ) :
 
         <?php endif; ?>
 				<tr>
-					<td><a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>">
-							<?php echo esc_html( $status ); ?></a>
+					<td>
+						<a href="<?php echo esc_url( get_permalink( $report->ID ) ); ?>" title="<?php echo esc_attr( $status_title ); ?>" class="<?php echo esc_attr( 'ptr-status-badge ptr-status-badge-' . strtolower( $status ) ); ?>">
+							<?php echo esc_html( $status ); ?>
+						</a>
 					</td>
 					<td><?php echo esc_html( Display::get_display_php_version( $report->ID ) ); ?></td>
 					<td><?php echo esc_html( Display::get_display_mysql_version( $report->ID ) ); ?></td>
@@ -111,7 +113,6 @@ foreach ( $revisions as $revision ) :
 			else :
 				?>
 				<tr>
-					<td></td>
 					<td colspan="3">
 						No reports for changeset.
 					</td>
