@@ -55,6 +55,19 @@ if ( $parent ) :
 		<td><?php echo wp_kses_post( $host ); ?></td>
 	</tr>
 	<tr>
+		<td><strong>Test Date</strong></td>
+		<td>
+			<?php the_date(); ?>
+			<?php the_time(); ?>
+		</td>
+	</tr>
+	<tr>
+		<td><strong>Execution Time</strong></td>
+		<td>
+			<?php echo esc_html( Display::get_display_time( $report->ID ) ); ?>
+		</td>
+	</tr>
+	<tr>
 		<td><strong>PHP Version</strong></td>
 		<td><?php echo esc_html( Display::get_display_php_version( $report->ID ) ); ?></td>
 	</tr>

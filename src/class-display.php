@@ -74,7 +74,7 @@ class Display {
 			);
 		} else {
 			$content = ptr_get_template_part(
-				'result-set',
+				'result-set-single',
 				array(
 					'posts_per_page' => 500,
 					'revisions'      => array(
@@ -92,10 +92,24 @@ class Display {
 	 * Render the test results.
 	 */
 	public static function render_results( $atts ) {
+		$current_user = null;
+
+		if ( is_author() ) {
+			/**
+			 * @var \WP_User|null $current_user
+			 */
+			$current_user = $GLOBALS['authordata'];
+
+			if ( $current_user ) {
+				if ( ! in_array( 'test-reporter', $current_user->roles, true ) ) {
+					return '';
+				}
+			}
+		}
 
 		$output     = '';
 		$query_args = array(
-			'posts_per_page' => 3,
+			'posts_per_page' => 20,
 			'post_type'      => 'result',
 			'post_parent'    => 0,
 			'orderby'        => 'post_name',
@@ -117,16 +131,31 @@ class Display {
 			return $output;
 		}
 		$output .= self::get_display_css();
-		if ( $paged <= 1 ) {
-			$output .= self::get_reporter_avatars();
+
+		if ( is_author() ) {
+			if ( $current_user ) {
+				$output .= ptr_get_template_part(
+						'result-set-single',
+						array(
+								'posts_per_page' => 50,
+								'revisions' => $rev_query->posts,
+								'post_author' => $current_user->ID,
+						)
+				);
+			}
+		} else {
+			if ($paged <= 1) {
+				$output .= self::get_reporter_avatars();
+			}
+
+			$output .= ptr_get_template_part(
+					'result-set-all',
+					array(
+							'posts_per_page' => 50,
+							'revisions' => $rev_query->posts,
+					)
+			);
 		}
-		$output .= ptr_get_template_part(
-			'result-set',
-			array(
-				'posts_per_page' => 50,
-				'revisions'      => $rev_query->posts,
-			)
-		);
 		ob_start();
 		self::pagination( $rev_query );
 		$output .= ob_get_clean();
@@ -142,8 +171,9 @@ class Display {
 		ob_start();
 		?>
 		<style>
-			a.ptr-status-badge {
-				color: #FFF;
+			.ptr-status-badge {
+				color: #fff !important;
+				text-decoration: none !important;
 				display: inline-block;
 				padding-left: 8px;
 				padding-right: 8px;
@@ -152,13 +182,13 @@ class Display {
 				border-radius: 3px;
 				font-weight: normal;
 			}
-			a.ptr-status-badge-passed {
+			.ptr-status-badge-passed {
 				background-color: #39BC00;
 			}
-			a.ptr-status-badge-failed {
+			.ptr-status-badge-failed {
 				background-color: #CD543A;
 			}
-			a.ptr-status-badge-errored {
+			.ptr-status-badge-errored {
 				background-color: #909090;
 			}
 			.pagination-centered {
@@ -169,9 +199,19 @@ class Display {
 			}
 			.pagination-centered ul.pagination li {
 				display: inline-block;
+				margin: 0 5px;
 			}
 			.pagination-centered ul.pagination li a {
 				cursor: pointer;
+			}
+			.ptr-test-reporter-table th {
+				text-align: center;
+			}
+			.ptr-test-reporter-table td {
+				text-align: center;
+			}
+			.ptr-test-reporter-table td[colspan] {
+				text-align: left;
 			}
 			.ptr-test-reporter-list {
 				list-style-type: none;
@@ -193,6 +233,7 @@ class Display {
 				font-weight: 600;
 				margin-top: 6px;
 				margin-bottom: 6px;
+				text-transform: none;
 			}
 			.ptr-test-reporter-list.ptr-test-reporter-inactive li h5.avatar-name {
 				font-size: 11px;
@@ -238,7 +279,6 @@ class Display {
 		$all_time_reporters = $wpdb->get_col( "SELECT DISTINCT post_author FROM {$wpdb->posts} WHERE post_type='result' AND post_status='publish' AND post_parent != 0" ); // @codingStandardsIgnoreLine
 		if ( ! empty( $all_time_reporters ) ) {
 			$all_time_reporters = array_map( 'intval', $all_time_reporters );
-			$output            .= '<h4>Registered, but no reports in >25 Revisions</h4>' . PHP_EOL;
 			$users              = get_users(
 				array(
 					'orderby' => 'display_name',
@@ -249,6 +289,9 @@ class Display {
 				if ( in_array( $user->ID, $active_reporters, true ) ) {
 					unset( $users[ $i ] );
 				}
+			}
+			if ( ! empty( $users ) ) {
+				$output .= '<h4>Registered, but no reports in >25 Revisions</h4>' . PHP_EOL;
 			}
 			$output .= self::get_user_list( $users, 'inactive' );
 		}
@@ -268,13 +311,10 @@ class Display {
 				$output .= '</a>';
 			}
 			$output .= '<h5 class="avatar-name">';
-			if ( ! empty( $user->user_url ) ) {
-				$output .= '<a target="_blank" rel="nofollow" href="' . esc_url( $user->user_url ) . '">';
-			}
+
+			$output .= '<a href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';;
 			$output .= $user->display_name;
-			if ( ! empty( $user->user_url ) ) {
-				$output .= '</a>';
-			}
+			$output .= '</a>';
 			$output .= '</h5>';
 			$output .= '</li>';
 		}
@@ -292,8 +332,8 @@ class Display {
 		if ( empty( $results['time'] ) ) {
 			return '';
 		}
-		$minutes = floor( ( (int) $results['time'] / 60 ) % 60 );
-		$seconds = (int) $results['time'] % 60;
+		$minutes = floor( ( (int) ( $results['time'] / 60 ) )% 60 );
+		$seconds = ( ( (int) $results['time'] ) % 60 );
 		return "{$minutes}m {$seconds}s";
 	}
 
@@ -326,6 +366,29 @@ class Display {
 			$mysql_version = $bits[0];
 		}
 		return $mysql_version;
+	}
+
+	/**
+	 * Get the environment name for display
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_environment_name( $report_id ) {
+		$report = get_post( $report_id );
+		$host = 'Unknown';
+		$user = get_user_by( 'id', $report->post_author );
+
+		if ( $user ) {
+			$host = $user->display_name;
+		}
+
+		$env = get_post_meta( $report_id, 'environment_name', true );
+		if ( ! empty( $env ) ) {
+			$host .= ' (' . $env . ')';
+		}
+
+		return $host;
 	}
 
 	/**
