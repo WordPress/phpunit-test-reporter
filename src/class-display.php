@@ -332,8 +332,8 @@ class Display {
 		if ( empty( $results['time'] ) ) {
 			return '';
 		}
-		$minutes = floor( ( (int) $results['time'] / 60 ) % 60 );
-		$seconds = (int) $results['time'] % 60;
+		$minutes = floor( ( (int) ( $results['time'] / 60 ) )% 60 );
+		$seconds = ( ( (int) $results['time'] ) % 60 );
 		return "{$minutes}m {$seconds}s";
 	}
 
