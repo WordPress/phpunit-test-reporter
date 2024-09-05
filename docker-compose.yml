@@ -13,7 +13,9 @@ services:
     volumes:
       - ./:/var/www/html/wp-content/plugins/wp-unit-test-reporter
     environment:
-      WORDPRESS_DB_PASSWORD: password
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=password
   db:
     image: mysql
     restart: always
