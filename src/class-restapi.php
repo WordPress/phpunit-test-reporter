@@ -121,25 +121,27 @@ class RestAPI {
 			$php_version = $parts[0] . '.' . $parts[1];
 		}
 
-		$env_name = $env['label'] ?? '';;
+		$env_type = $env['label'] ?? '';;
 
 		$current_user = wp_get_current_user();
 
-		$meta_query = [
+		$tax_query = [
 			'relation' => 'AND'
 		];
 
 		if ( $php_version ) {
-			$meta_query[] = array(
-				'key'   => 'php_version',
-				'value' => $php_version,
+			$tax_query[] = array(
+				'taxonomy' => 'php-version',
+				'terms'    => [ $php_version ],
+				'field'    => 'name',
 			);
 		}
 
-		if ( $env_name ) {
-			$meta_query[] = array(
-				'key'   => 'environment_name',
-				'value' => $env_name,
+		if ( $env_type ) {
+			$tax_query[] = array(
+				'taxonomy'   => 'environment-type',
+				'terms'      => [ $env_type ],
+				'field'      => 'name',
 			);
 		}
 
@@ -149,7 +151,7 @@ class RestAPI {
 			'post_type'   => 'result',
 			'numberposts' => 1,
 			'author'      => $current_user->ID,
-			'meta_query'  => $meta_query,
+			'tax_query'   => $tax_query,
 		) );
 
 		if ( $results ) {
@@ -157,8 +159,8 @@ class RestAPI {
 		} else {
 			$post_title = $current_user->user_login . ' - ' . $slug;
 
-			if ( $env_name ) {
-				$post_title .= '-' . $env_name;
+			if ( $env_type ) {
+				$post_title .= '-' . $env_type;
 			}
 
 			if ( $php_version ) {
@@ -182,13 +184,14 @@ class RestAPI {
 			return $post_id;
 		}
 
+		wp_set_object_terms( $post_id, array( $php_version ), 'php-version' );
+		wp_set_object_terms( $post_id, array( $env_type ), 'environment-type' );
+
 		$env     = isset( $parameters['env'] ) ? json_decode( $parameters['env'], true ) : array();
 		$results = isset( $parameters['results'] ) ? json_decode( $parameters['results'], true ) : array();
 
 		update_post_meta( $post_id, 'env', $env );
 		update_post_meta( $post_id, 'results', $results );
-		update_post_meta( $post_id, 'php_version', $php_version );
-		update_post_meta( $post_id, 'environment_name', $env_name );
 
 		self::maybe_send_email_notifications( $parent_id );
 
@@ -212,25 +215,30 @@ class RestAPI {
 		$p         = get_post( $post_id );
 		$parent_id = $p->post_parent;
 
-		$php_version = get_post_meta( $post_id, 'php_version', true );
-		$env_name    = get_post_meta( $post_id, 'environment_name', true );
+		$post_terms = wp_get_object_terms( $post_id, array( 'php-version', 'environment-type' ) );
 
-		$meta_query = [
-		  'relation' => 'AND'
-		];
-
-		if ( $php_version ) {
-			$meta_query[] = array(
-			  'key'   => 'php_version',
-			  'value' => $php_version,
-			);
+		if ( is_wp_error( $post_terms ) ) {
+			return [];
 		}
 
-		if ( $env_name ) {
-			$meta_query[] = array(
-			  'key'   => 'environment_name',
-			  'value' => $env_name,
-			);
+		$tax_query = [
+			'relation' => 'AND'
+		];
+
+		foreach ( $post_terms as $term ) {
+			if ( 'php-version' === $term['taxonomy'] ) {
+				$tax_query[] = array(
+					'taxonomy' => 'php-version',
+					'terms'    => [ $term['term_id'] ],
+				);
+			}
+
+			if ( 'environment-type' === $term['taxonomy'] ) {
+				$tax_query[] = array(
+					'taxonomy' => 'environment-type',
+					'terms'    => [ $term['term_id'] ],
+				);
+			}
 		}
 
 		$previous_results = get_posts( array(
@@ -238,7 +246,7 @@ class RestAPI {
 		  'post_type'           => 'result',
 		  'numberposts'         => 1,
 		  'author'              => $p->post_author,
-		  'meta_query'          => $meta_query,
+		  'tax_query'           => $tax_query,
 		) );
 
 		$new_failures      = [];
