@@ -42,6 +42,42 @@ class Content_Model {
 				),
 			)
 		);
+
+		register_taxonomy(
+			'php-version',
+			array( 'result' ),
+			array(
+				'labels'       => array(
+					'name'          => __( 'PHP Versions', 'ptr' ),
+					'singular_name' => __( 'PHP Version', 'ptr' ),
+				),
+				'hierarchical'               => false,
+				'public'                     => true,
+				'show_ui'                    => true,
+				'show_admin_column'          => true,
+				'show_in_nav_menus'          => false,
+				'show_tagcloud'              => false,
+				'show_in_rest'               => true,
+			)
+		);
+
+		register_taxonomy(
+			'environment-type',
+			array( 'result' ),
+			array(
+				'labels'       => array(
+					'name'          => __( 'Environment Types', 'ptr' ),
+					'singular_name' => __( 'Environment Type', 'ptr' ),
+				),
+				'hierarchical'               => false,
+				'public'                     => true,
+				'show_ui'                    => true,
+				'show_admin_column'          => true,
+				'show_in_nav_menus'          => false,
+				'show_tagcloud'              => false,
+				'show_in_rest'               => true,
+			)
+		);
 	}
 
 	/**
