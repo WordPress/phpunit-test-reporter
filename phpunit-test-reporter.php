@@ -29,6 +29,7 @@ add_action( 'body_class', array( 'PTR\Display', 'filter_body_class' ) );
 add_action( 'post_class', array( 'PTR\Display', 'filter_post_class' ) );
 add_action( 'the_content', array( 'PTR\Display', 'filter_the_content' ) );
 add_action( 'rest_api_init', array( 'PTR\RestAPI', 'register_routes' ) );
+add_action( 'pre_get_posts', array( 'PTR\Display', 'pre_get_posts' ) );
 
 add_action( 'load-edit.php', 'ptr_load_edit_php' );
 

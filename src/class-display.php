@@ -89,6 +89,25 @@ class Display {
 	}
 
 	/**
+	 * Hooks into the main query to list test results for a host instead of posts.
+	 *
+	 * @param \WP_Query $query Query instance.
+	 */
+	public static function pre_get_posts( $query ) {
+		if ( $query->is_main_query() && $query->is_author() ) {
+			$author_name = $query->get( 'author_name');
+			if ( $author_name ) {
+				$user = get_user_by( 'slug', $author_name );
+
+				if ( $user && in_array( 'test-reporter', $user->roles, true ) ) {
+					$query->set( 'post_type', 'result' );
+				}
+			}
+		}
+
+	}
+
+	/**
 	 * Render the test results.
 	 */
 	public static function render_results( $atts ) {
