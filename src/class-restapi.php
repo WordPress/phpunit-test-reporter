@@ -193,6 +193,12 @@ class RestAPI {
 		update_post_meta( $post_id, 'env', $env );
 		update_post_meta( $post_id, 'results', $results );
 
+		if ( empty( $results['failures'] ) && empty( $results['errors'] ) ) {
+			wp_set_object_terms( $post_id, 'Failed', 'report-result' );
+		} else {
+			wp_set_object_terms( $post_id, 'Passed', 'report-result' );
+		}
+
 		self::maybe_send_email_notifications( $parent_id );
 
 		// Create the response object.

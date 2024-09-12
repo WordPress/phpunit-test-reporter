@@ -170,7 +170,6 @@ class Display {
 			$output .= ptr_get_template_part(
 					'result-set-all',
 					array(
-							'posts_per_page' => 50,
 							'revisions' => $rev_query->posts,
 					)
 			);

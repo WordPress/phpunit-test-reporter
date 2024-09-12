@@ -78,6 +78,24 @@ class Content_Model {
 				'show_in_rest'               => true,
 			)
 		);
+
+		register_taxonomy(
+			'report-result',
+			array( 'result' ),
+			array(
+				'labels'       => array(
+					'name'          => __( 'Result Status', 'ptr' ),
+					'singular_name' => __( 'Result Status', 'ptr' ),
+				),
+				'hierarchical'               => false,
+				'public'                     => false,
+				'show_ui'                    => true,
+				'show_admin_column'          => true,
+				'show_in_nav_menus'          => false,
+				'show_tagcloud'              => false,
+				'show_in_rest'               => true,
+			)
+		);
 	}
 
 	/**

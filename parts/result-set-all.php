@@ -7,7 +7,6 @@ echo Display::get_display_css(); ?>
 	<thead>
 		<tr>
 			<th style="width:100px">Revision</th>
-			<th style="width:100px">Environments</th>
 			<th style="width:100px">Passed</th>
 			<th style="width:100px">Failed</th>
 			<th style="width:100px">➡️</th>
@@ -17,34 +16,9 @@ echo Display::get_display_css(); ?>
 		<?php
 		foreach ( $revisions as $revision ) :
 			$rev_id = (int) ltrim( $revision->post_name, 'r' );
-      $query_args   = array(
-        'posts_per_page' => $posts_per_page,
-        'post_type'      => 'result',
-        'post_parent'    => $revision->ID,
-        'orderby'        => 'post_title',
-        'order'          => 'ASC',
-      );
-      $report_query = new WP_Query( $query_args );
 
-      $environments = [];
-      $num_hosts = 0;
-      $num_passed = 0;
-      $num_failed = 0;
-
-      foreach ( $report_query->posts as $report ) {
-				$env = Display::get_display_environment_name($report->ID);
-
-				$environments[$env] ??= 0;
-				++$environments[$env];
-
-				$results = get_post_meta($report->ID, 'results', true);
-
-				if (0 === (int) $results['failures'] && 0 === (int) $results['errors']) {
-					++$num_passed;
-				} else {
-					++$num_failed;
-				}
-			}
+			$num_passed = ptr_count_test_results( $revision->ID );
+			$num_failed = ptr_count_test_results( $revision->ID, 'failed' );
 			?>
 			<tr>
 				<td>
@@ -54,9 +28,7 @@ echo Display::get_display_css(); ?>
             r<?php echo $rev_id; ?>
           </a>
         </td>
-        <td>
-          <?php echo count( $environments ); ?>
-        </td>
+
         <td>
             <span class="ptr-status-badge ptr-status-badge-passed">
 			        <?php echo $num_passed; ?>
