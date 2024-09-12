@@ -121,8 +121,7 @@ class RestAPI {
 			$php_version = $parts[0] . '.' . $parts[1];
 		}
 
-		$env_name = $env['env_name'] ?? '';;
-		$env_type = $env['type'] ?? '';;
+		$env_type = $env['label'] ?? '';;
 
 		$current_user = wp_get_current_user();
 
@@ -159,6 +158,10 @@ class RestAPI {
 			$post_id = $results[0]->ID;
 		} else {
 			$post_title = $current_user->user_login . ' - ' . $slug;
+
+			if ( $env_type ) {
+				$post_title .= '-' . $env_type;
+			}
 
 			if ( $php_version ) {
 				$post_title .= '-' . $php_version;
