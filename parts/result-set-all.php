@@ -18,7 +18,7 @@ echo Display::get_display_css(); ?>
 			$rev_id = (int) ltrim( $revision->post_name, 'r' );
 
 			$num_passed = ptr_count_test_results( $revision->ID );
-			$num_failed = ptr_count_test_results( $revision->ID, true );
+			$num_failed = ptr_count_test_results( $revision->ID, 'failed' );
 			?>
 			<tr>
 				<td>

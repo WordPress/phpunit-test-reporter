@@ -97,12 +97,12 @@ function ptr_get_template_part( $template, $vars = array() ) {
 /**
  * Counts the number of failing or passing test reports for a revision.
  *
- * @param int  $revision_parent_id The current revision's post ID.
- * @param bool $failures           Whether to count failures. Default is false (count successful reports).
+ * @param int    $revision_parent_id The current revision's post ID.
+ * @param string $status             The status term slug to count.
  *
- * @return int The number of reports for the given revision that either passed or failed.
+ * @return int The number of reports for the given revision.
  */
-function ptr_count_test_results( $revision_parent_id, $failures = false ) {
+function ptr_count_test_results( $revision_parent_id, $status = 'passed' ) {
 	$report_query = new WP_Query(
 		array(
 			'post_type'      => 'result',
@@ -112,7 +112,7 @@ function ptr_count_test_results( $revision_parent_id, $failures = false ) {
 			'tax_query'      => array(
 				array(
 					'taxonomy'   => 'report-result',
-					'terms'      => $failures ? 'failed' : 'passed',
+					'terms'      => $status,
 					'field'      => 'slug',
 				),
 			)
