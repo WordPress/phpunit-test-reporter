@@ -122,7 +122,7 @@ class RestAPI {
 		}
 
 		$db_version = ! empty( $parameters['mysql_version'] ) ? $parameters['mysql_version'] : 'Unknown';
-		$env_name   = ! empty( $env['label'] ) ? wp_kses( $env['label'] ) : '';
+		$env_name   = ! empty( $env['label'] ) ? wp_kses( $env['label'], [] ) : '';
 
 		$current_user = wp_get_current_user();
 		$tax_query    = [
@@ -149,7 +149,7 @@ class RestAPI {
 
 		if ( $env_name ) {
 			$meta_query[] = array(
-				'key'   => 'environment-type',
+				'key'   => 'environment_name',
 				'value' => $env_name,
 			);
 		}
