@@ -208,11 +208,17 @@ class RestAPI {
 		update_post_meta( $post_id, 'results', $results );
 		update_post_meta( $post_id, 'environment_name', $env_name );
 
-		if ( empty( $results['failures'] ) && empty( $results['errors'] ) ) {
-			wp_set_object_terms( $post_id, 'Failed', 'report-result' );
+		$outcome = 'Unknown';
+
+		if ( ! empty( $results['failures'] ) ) {
+			$outcome = 'Failed';
+		} elseif ( ! empty( $results['errors'] ) ) {
+			$outcome = 'Errored';
 		} else {
-			wp_set_object_terms( $post_id, 'Passed', 'report-result' );
+			$outcome = 'Passed';
 		}
+
+		wp_set_object_terms( $post_id, $outcome, 'report-result' );
 
 		self::maybe_send_email_notifications( $parent_id );
 
