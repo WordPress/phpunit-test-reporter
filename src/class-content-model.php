@@ -62,12 +62,12 @@ class Content_Model {
 		);
 
 		register_taxonomy(
-			'environment-type',
+			'db-version',
 			array( 'result' ),
 			array(
 				'labels'       => array(
-					'name'          => __( 'Environment Types', 'ptr' ),
-					'singular_name' => __( 'Environment Type', 'ptr' ),
+					'name'          => __( 'Database Versions', 'ptr' ),
+					'singular_name' => __( 'Database Version', 'ptr' ),
 				),
 				'hierarchical'               => false,
 				'public'                     => false,

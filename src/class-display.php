@@ -383,6 +383,7 @@ class Display {
 			$bits          = explode( ',', $env['mysql_version'] );
 			$mysql_version = $bits[0];
 		}
+
 		return $mysql_version;
 	}
 
@@ -393,20 +394,13 @@ class Display {
 	 * @return string
 	 */
 	public static function get_display_environment_name( $report_id ) {
-		$report = get_post( $report_id );
-		$host = 'Unknown';
-		$user = get_user_by( 'id', $report->post_author );
+		$env_name = get_post_meta( $report_id, 'environment_name', true );
 
-		if ( $user ) {
-			$host = $user->display_name;
+		if ( ! empty( $env_name ) ) {
+			return esc_html( $env_name );
 		}
 
-		$env = get_post_meta( $report_id, 'environment_name', true );
-		if ( ! empty( $env ) ) {
-			$host .= ' (' . $env . ')';
-		}
-
-		return $host;
+		return 'Unknown';
 	}
 
 	/**

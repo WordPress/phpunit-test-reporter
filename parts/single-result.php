@@ -68,6 +68,12 @@ if ( $parent ) :
 		</td>
 	</tr>
 	<tr>
+		<td><strong>Environment Name</strong></td>
+		<td>
+			<?php echo esc_html( Display::get_display_environment_name( $report->ID ) ); ?>
+		</td>
+	</tr>
+	<tr>
 		<td><strong>PHP Version</strong></td>
 		<td><?php echo esc_html( Display::get_display_php_version( $report->ID ) ); ?></td>
 	</tr>
