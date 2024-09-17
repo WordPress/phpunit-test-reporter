@@ -284,10 +284,13 @@ class Display {
 				$output .= '</a>';
 			}
 			$output .= '<h5 class="avatar-name">';
-
-			$output .= '<a href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';;
+			if ( ! empty( $user->user_url ) ) {
+				$output .= '<a target="_blank" rel="nofollow" href="' . esc_url( $user->user_url ) . '">';
+			}
 			$output .= $user->display_name;
-			$output .= '</a>';
+			if ( ! empty( $user->user_url ) ) {
+				$output .= '</a>';
+			}
 			$output .= '</h5>';
 			$output .= '</li>';
 		}
