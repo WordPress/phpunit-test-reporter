@@ -8,7 +8,6 @@ foreach ( $revisions as $revision ) :
   $rev_id = (int) ltrim( $revision->post_name, 'r' );
 ?>
 
-
 <div class="ptr-test-reporter-single-revision">
 	<a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>">
 		r<?php echo $rev_id; ?>
@@ -31,17 +30,9 @@ foreach ( $revisions as $revision ) :
 				'author'         => $post_author ?? null,
 				'post_type'      => 'result',
 				'post_parent'    => $revision->ID,
-				'orderby'        => [ 'author' => 'ASC', 'env_name_clause' => 'ASC', 'php_version_clause' => 'ASC' ],
+				'orderby'        => [ 'author' => 'ASC', 'env_name_clause' => 'ASC' ],
 				'meta_query'     => array(
 					'relation' => 'OR',
-					'php_version_clause' =>	array(
-						'key'     => 'php_version',
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => 'php_version',
-						'compare' => 'NOT EXISTS',
-					),
 					'env_name_clause' => array(
 						'key'     => 'environment_name',
 						'compare' => 'EXISTS',

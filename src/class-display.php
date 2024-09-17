@@ -364,6 +364,7 @@ class Display {
 	public static function get_display_php_version( $report_id ) {
 		$php_version = 'Unknown';
 		$env         = get_post_meta( $report_id, 'env', true );
+
 		if ( ! empty( $env['php_version'] ) ) {
 			$php_version = 'PHP ' . $env['php_version'];
 		}
