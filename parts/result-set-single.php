@@ -72,13 +72,12 @@ foreach ( $revisions as $revision ) :
 								'extra_attr' => 'style="vertical-align: middle;margin-right:5px;"',
 							)
 						);
+
+						$host .= Display::get_display_reporter_name( $report->post_author );
+
 						if ( ! empty( $user->user_url ) ) {
 							$host .= '</a>';
 						}
-
-						$host .= '<a href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';
-						$host .= Display::get_display_reporter_name( $report->post_author );
-						$host .= '</a>';
 					}
 					?>
         <?php if ( $prev_author !== $host ): ?>

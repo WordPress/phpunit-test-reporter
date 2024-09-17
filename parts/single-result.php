@@ -24,12 +24,6 @@ if ( $user ) {
 			'extra_attr' => 'style="vertical-align: middle;margin-right:5px;"',
 		)
 	);
-	if ( ! empty( $user->user_url ) ) {
-		$host .= '</a>';
-	}
-	if ( ! empty( $user->user_url ) ) {
-		$host .= '<a target="_blank" rel="nofollow" href="' . esc_url( $user->user_url ) . '">';
-	}
 	$host .= $user->display_name;
 	if ( ! empty( $user->user_url ) ) {
 		$host .= '</a>';

@@ -89,52 +89,19 @@ class Display {
 	}
 
 	/**
-	 * Hooks into the main query to list test results for a host instead of posts.
-	 *
-	 * @param \WP_Query $query Query instance.
-	 */
-	public static function pre_get_posts( $query ) {
-		if ( $query->is_main_query() && $query->is_author() ) {
-			$author_name = $query->get( 'author_name');
-			if ( $author_name ) {
-				$user = get_user_by( 'slug', $author_name );
-
-				if ( $user && in_array( 'test-reporter', $user->roles, true ) ) {
-					$query->set( 'post_type', 'result' );
-				}
-			}
-		}
-
-	}
-
-	/**
 	 * Render the test results.
 	 */
 	public static function render_results( $atts ) {
 		$current_user = null;
-
-		if ( is_author() ) {
-			/**
-			 * @var \WP_User|null $current_user
-			 */
-			$current_user = $GLOBALS['authordata'];
-
-			if ( $current_user ) {
-				if ( ! in_array( 'test-reporter', $current_user->roles, true ) ) {
-					return '';
-				}
-			}
-		}
-
-		$output     = '';
-		$query_args = array(
+		$output       = '';
+		$query_args   = array(
 			'posts_per_page' => 20,
 			'post_type'      => 'result',
 			'post_parent'    => 0,
 			'orderby'        => 'post_name',
 			'order'          => 'DESC',
 		);
-		$paged      = isset( $_GET['rpage'] ) ? (int) $_GET['rpage'] : 0;
+		$paged        = isset( $_GET['rpage'] ) ? (int) $_GET['rpage'] : 0;
 		if ( $paged ) {
 			$query_args['paged'] = $paged;
 		}
@@ -151,29 +118,17 @@ class Display {
 		}
 		$output .= self::get_display_css();
 
-		if ( is_author() ) {
-			if ( $current_user ) {
-				$output .= ptr_get_template_part(
-						'result-set-single',
-						array(
-								'posts_per_page' => 50,
-								'revisions' => $rev_query->posts,
-								'post_author' => $current_user->ID,
-						)
-				);
-			}
-		} else {
-			if ($paged <= 1) {
-				$output .= self::get_reporter_avatars();
-			}
-
-			$output .= ptr_get_template_part(
-					'result-set-all',
-					array(
-							'revisions' => $rev_query->posts,
-					)
-			);
+		if ($paged <= 1) {
+			$output .= self::get_reporter_avatars();
 		}
+
+		$output .= ptr_get_template_part(
+				'result-set-all',
+				array(
+						'revisions' => $rev_query->posts,
+				)
+		);
+
 		ob_start();
 		self::pagination( $rev_query );
 		$output .= ob_get_clean();
