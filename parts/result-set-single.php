@@ -77,7 +77,7 @@ foreach ( $revisions as $revision ) :
 						}
 
 						$host .= '<a href="' . esc_url( get_author_posts_url( $user->ID) ) . '">';
-						$host .= Display::get_display_environment_name( $report->ID );
+						$host .= Display::get_display_reporter_name( $report->post_author );
 						$host .= '</a>';
 					}
 					?>

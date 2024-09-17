@@ -405,6 +405,22 @@ class Display {
 	}
 
 	/**
+	 * Get the test reporter's display name.
+	 *
+	 * @param integer $reporter_id Reporter's user ID.
+	 * @return string
+	 */
+	public static function get_display_reporter_name( $reporter_id ) {
+		$reporter = new \WP_User( $reporter_id );
+
+		if ( empty( $reporter->display_name ) ) {
+			return esc_html( $reporter->display_name );
+		}
+
+		return $reporter->user_nicename;
+	}
+
+	/**
 	 * Get the extensions list for display
 	 *
 	 * @param integer $report_id Report ID.
