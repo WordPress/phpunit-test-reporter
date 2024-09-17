@@ -1,5 +1,5 @@
 # PHPUnit Test Reporter #
-**Contributors:** [octalmage](https://profiles.wordpress.org/octalmage), [danielbachhuber](https://profiles.wordpress.org/danielbachhuber), [wpamitkumar](https://profiles.wordpress.org/wpamitkumar), [mikeschroder](https://profiles.wordpress.org/mikeschroder), [pfefferle](https://profiles.wordpress.org/pfefferle)
+**Contributors:** [octalmage](https://profiles.wordpress.org/octalmage), [danielbachhuber](https://profiles.wordpress.org/danielbachhuber), [wpamitkumar](https://profiles.wordpress.org/wpamitkumar), [kirasong](https://profiles.wordpress.org/kirasong), [pfefferle](https://profiles.wordpress.org/pfefferle), [desrosj](https://profiles.wordpress.org/desrosj), [crixu](https://profiles.wordpress.org/crixu)
 **Tags:** phpunit
 **Requires at least:** 4.7
 **Tested up to:** 5.5

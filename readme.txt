@@ -1,5 +1,5 @@
 === PHPUnit Test Reporter ===
-Contributors: octalmage, danielbachhuber, wpamitkumar, mikeschroder, pfefferle
+Contributors: octalmage, danielbachhuber, wpamitkumar, kirasong, pfefferle, desrosj, crixu
 Tags: phpunit
 Requires at least: 4.7
 Tested up to: 5.5
