@@ -19,6 +19,7 @@ Usage:
 - `make stop`: Stops Docker test environment.
 - `make shell`: SSH to Docker test environment.
 - `make test`: Runs `phpunit` and `phpcs` in the Docker test environment.
+- `make metadiff`: Generates diff for uploading to ticket to request update from [meta](https://meta.trac.wordpress.org/).
 
 
 ## How to build `README.md`
