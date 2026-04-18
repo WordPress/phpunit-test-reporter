@@ -46,18 +46,15 @@ class Content_Model {
 		register_post_type(
 			'rtc-perf-result',
 			array(
-				'labels'       => array(
+				'labels'             => array(
 					'name'          => __( 'RTC Performance Results', 'ptr' ),
-					'singular_name' => __( 'RTCPerformance Result', 'ptr' ),
+					'singular_name' => __( 'RTC Performance Result', 'ptr' ),
 				),
-				'public'       => true,
-				'has_archive'  => false,
-				'show_in_rest' => true,
-				'hierarchical' => false,
-				'rewrite'      => array(
-					'slug' => 'rtc-perf-results',
-				),
-				'supports'     => array(
+				'public'             => false,
+				'show_ui'            => true,
+				'show_in_rest'       => true,
+				'hierarchical'       => false,
+				'supports'           => array(
 					'title',
 					'author',
 					'custom-fields',
