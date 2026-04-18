@@ -43,9 +43,31 @@ class Content_Model {
 			)
 		);
 
+		register_post_type(
+			'rtc-perf-result',
+			array(
+				'labels'       => array(
+					'name'          => __( 'RTC Performance Results', 'ptr' ),
+					'singular_name' => __( 'RTCPerformance Result', 'ptr' ),
+				),
+				'public'       => true,
+				'has_archive'  => false,
+				'show_in_rest' => true,
+				'hierarchical' => false,
+				'rewrite'      => array(
+					'slug' => 'rtc-perf-results',
+				),
+				'supports'     => array(
+					'title',
+					'author',
+					'custom-fields',
+				),
+			)
+		);
+
 		register_taxonomy(
 			'php-version',
-			array( 'result' ),
+			array( 'result', 'rtc-perf-result' ),
 			array(
 				'labels'       => array(
 					'name'          => __( 'PHP Versions', 'ptr' ),
@@ -63,7 +85,7 @@ class Content_Model {
 
 		register_taxonomy(
 			'db-version',
-			array( 'result' ),
+			array( 'result', 'rtc-perf-result' ),
 			array(
 				'labels'       => array(
 					'name'          => __( 'Database Versions', 'ptr' ),
@@ -96,6 +118,7 @@ class Content_Model {
 				'show_in_rest'               => true,
 			)
 		);
+
 	}
 
 	/**
