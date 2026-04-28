@@ -139,9 +139,9 @@ class RestAPI {
 		}
 
 		$db_version = ! empty( $env['mysql_version'] ) ? $env['mysql_version'] : '';
-		$wp_version = ! empty( $env['wp_version'] ) ? wp_kses( $env['wp_version'], [] ) : '';
+		$wp_version = ! empty( $env['wp_version'] ) ? strip_tags( $env['wp_version'] ) : '';
 
-		$env_name = ! empty( $parameters['environment_name'] ) ? wp_kses( $parameters['environment_name'], [] ) : '';
+		$env_name = ! empty( $parameters['environment_name'] ) ? strip_tags( $parameters['environment_name'] ) : '';
 
 		$current_user = wp_get_current_user();
 
