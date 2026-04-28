@@ -18,17 +18,21 @@ class RestAPI {
 				'methods'             => 'POST',
 				'callback'            => array( __CLASS__, 'add_performance_results_callback' ),
 				'args'                => array(
-					'results' => array(
-						'required'          => true,
-						'description'       => 'Performance test results in JSON format.',
-						'type'              => 'string',
-						'validate_callback' => array( __CLASS__, 'validate_callback' ),
+					'results'          => array(
+						'required'    => true,
+						'description' => 'Performance test results keyed by approach and scenario.',
+						'type'        => 'object',
 					),
-					'env'     => array(
-						'required'          => true,
-						'description'       => 'JSON blob containing environment information.',
+					'env'              => array(
+						'required'    => true,
+						'description' => 'Environment information for the test run.',
+						'type'        => 'object',
+					),
+					'environment_name' => array(
+						'required'          => false,
+						'description'       => 'Human-readable label for the environment under test.',
 						'type'              => 'string',
-						'validate_callback' => array( __CLASS__, 'validate_callback' ),
+						'sanitize_callback' => 'sanitize_text_field',
 					),
 				),
 				'permission_callback' => array( __CLASS__, 'permission' ),
@@ -122,8 +126,9 @@ class RestAPI {
 	public static function add_performance_results_callback( $data ) {
 		$parameters = $data->get_params();
 
-		$env     = json_decode( $parameters['env'], true );
-		$results = json_decode( $parameters['results'], true );
+		// env and results are decoded by the REST API when Content-Type is application/json.
+		$env     = is_array( $parameters['env'] ) ? $parameters['env'] : (array) json_decode( $parameters['env'], true );
+		$results = is_array( $parameters['results'] ) ? $parameters['results'] : (array) json_decode( $parameters['results'], true );
 
 		$php_version = '';
 		if ( ! empty( $env['php_version'] ) ) {
@@ -133,7 +138,14 @@ class RestAPI {
 
 		$db_version = ! empty( $env['mysql_version'] ) ? $env['mysql_version'] : '';
 		$wp_version = ! empty( $env['wp_version'] ) ? wp_kses( $env['wp_version'], [] ) : '';
-		$env_name   = ! empty( $env['label'] ) ? wp_kses( $env['label'], [] ) : '';
+
+		// Accept environment_name from the top-level parameter (preferred) or env['label'] (legacy).
+		$env_name = '';
+		if ( ! empty( $parameters['environment_name'] ) ) {
+			$env_name = wp_kses( $parameters['environment_name'], [] );
+		} elseif ( ! empty( $env['label'] ) ) {
+			$env_name = wp_kses( $env['label'], [] );
+		}
 
 		$current_user = wp_get_current_user();
 
