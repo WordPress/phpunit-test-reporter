@@ -19,14 +19,16 @@ class RestAPI {
 				'callback'            => array( __CLASS__, 'add_performance_results_callback' ),
 				'args'                => array(
 					'results'          => array(
-						'required'    => true,
-						'description' => 'Performance test results keyed by approach and scenario.',
-						'type'        => 'object',
+						'required'          => true,
+						'description'       => 'Performance test results keyed by approach and scenario.',
+						'type'              => 'object',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'env'              => array(
-						'required'    => true,
-						'description' => 'Environment information for the test run.',
-						'type'        => 'object',
+						'required'          => true,
+						'description'       => 'Environment information for the test run.',
+						'type'              => 'object',
+						'validate_callback' => array( __CLASS__, 'validate_callback' ),
 					),
 					'environment_name' => array(
 						'required'          => false,
@@ -90,7 +92,7 @@ class RestAPI {
 				return true;
 			case 'env':
 			case 'results':
-				if ( null === json_decode( $value ) ) {
+				if ( is_string( $value ) && null === json_decode( $value ) ) {
 					return new WP_Error(
 						'rest_invalid',
 						__( 'Value must be encoded JSON.', 'ptr' ),
