@@ -79,6 +79,13 @@ if ( $parent ) :
 		<td><strong>Extensions</strong></td>
 		<td><?php echo esc_html( Display::get_display_extensions( $report->ID ) ); ?></td>
 	</tr>
+	<tr>
+		<td><strong>Image Libraries</strong></td>
+		<td><strong>GD</strong></td>
+		<td><?php echo esc_html( Display::get_display_gd_image_support( $report->ID ) ); ?></td>
+		<td><strong>Imagick</strong></td>
+		<td><?php echo esc_html( Display::get_display_imagick_image_support( $report->ID ) ); ?></td>
+	</tr>
 </table>
 
 <?php
