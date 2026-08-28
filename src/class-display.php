@@ -404,6 +404,76 @@ class Display {
 		return implode( ', ', $extensions );
 	}
 
+	/**
+	 * Get the GD library support for display.
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_gd_support( $report_id ) {
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! is_array( $env ) || empty( $env['gd_info'] ) || ! is_array( $env['gd_info'] ) ) {
+			return 'Not reported';
+		}
+
+		$gd_info = $env['gd_info'];
+		$version = ! empty( $gd_info['GD Version'] ) ? $gd_info['GD Version'] : 'Available';
+
+		// Image formats only, mirroring the mapping WP_Debug_Data uses on Site Health.
+		$format_keys = array(
+			'GIF Create' => 'GIF',
+			'JPEG'       => 'JPEG',
+			'PNG'        => 'PNG',
+			'WebP'       => 'WebP',
+			'BMP'        => 'BMP',
+			'AVIF'       => 'AVIF',
+			'HEIF'       => 'HEIF',
+			'TIFF'       => 'TIFF',
+			'XPM'        => 'XPM',
+		);
+
+		$supported = array();
+		foreach ( $format_keys as $format_key => $format ) {
+			if ( ! empty( $gd_info[ $format_key . ' Support' ] ) ) {
+				$supported[] = $format;
+			}
+		}
+
+		if ( empty( $supported ) ) {
+			return $version;
+		}
+
+		return $version . ' (' . implode( ', ', $supported ) . ')';
+	}
+
+	/**
+	 * Get the Imagick library support for display.
+	 *
+	 * @param integer $report_id Report ID.
+	 * @return string
+	 */
+	public static function get_display_imagick_support( $report_id ) {
+		$env = get_post_meta( $report_id, 'env', true );
+		if ( ! is_array( $env ) || empty( $env['imagick_info'] ) || ! is_array( $env['imagick_info'] ) ) {
+			return 'Not reported';
+		}
+
+		// Normalize casing before checking for common formats.
+		$formats = array_map(
+			'strtoupper',
+			array_filter( $env['imagick_info'], 'is_string' )
+		);
+		$common  = array( 'JPEG', 'PNG', 'GIF', 'WEBP', 'AVIF', 'HEIC', 'JXL' );
+		$found   = array_values( array_intersect( $common, $formats ) );
+
+		$output = count( $formats ) . ' ' . ( 1 === count( $formats ) ? 'format' : 'formats' );
+		if ( ! empty( $found ) ) {
+			$output .= ' (' . implode( ', ', $found ) . ')';
+		}
+
+		return $output;
+	}
+
 	private static function pagination( $query ) {
 		global $wp;
 		$bignum    = 999999999;
