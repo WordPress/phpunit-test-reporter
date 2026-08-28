@@ -94,6 +94,22 @@ class Test_Display_Image_Libraries extends WP_UnitTestCase {
 		);
 	}
 
+	public function test_imagick_single_format_uses_singular_wording() {
+		$post_id = $this->create_report(
+			array( 'imagick_info' => array( 'JPEG', 42, null ) )
+		);
+		$this->assertSame(
+			'1 format (JPEG)',
+			Display::get_display_imagick_support( $post_id )
+		);
+	}
+
+	public function test_env_meta_stored_as_string_returns_not_reported() {
+		$post_id = $this->create_report( 'corrupted' );
+		$this->assertSame( 'Not reported', Display::get_display_gd_support( $post_id ) );
+		$this->assertSame( 'Not reported', Display::get_display_imagick_support( $post_id ) );
+	}
+
 	public function test_no_env_meta_at_all_returns_not_reported() {
 		$post_id = $this->create_report();
 		$this->assertSame( 'Not reported', Display::get_display_gd_support( $post_id ) );

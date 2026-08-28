@@ -412,7 +412,7 @@ class Display {
 	 */
 	public static function get_display_gd_support( $report_id ) {
 		$env = get_post_meta( $report_id, 'env', true );
-		if ( empty( $env['gd_info'] ) || ! is_array( $env['gd_info'] ) ) {
+		if ( ! is_array( $env ) || empty( $env['gd_info'] ) || ! is_array( $env['gd_info'] ) ) {
 			return 'Not reported';
 		}
 
@@ -454,16 +454,19 @@ class Display {
 	 */
 	public static function get_display_imagick_support( $report_id ) {
 		$env = get_post_meta( $report_id, 'env', true );
-		if ( empty( $env['imagick_info'] ) || ! is_array( $env['imagick_info'] ) ) {
+		if ( ! is_array( $env ) || empty( $env['imagick_info'] ) || ! is_array( $env['imagick_info'] ) ) {
 			return 'Not reported';
 		}
 
 		// Normalize casing before checking for common formats.
-		$formats = array_map( 'strtoupper', $env['imagick_info'] );
+		$formats = array_map(
+			'strtoupper',
+			array_filter( $env['imagick_info'], 'is_string' )
+		);
 		$common  = array( 'JPEG', 'PNG', 'GIF', 'WEBP', 'AVIF', 'HEIC', 'JXL' );
 		$found   = array_values( array_intersect( $common, $formats ) );
 
-		$output = count( $formats ) . ' formats';
+		$output = count( $formats ) . ' ' . ( 1 === count( $formats ) ? 'format' : 'formats' );
 		if ( ! empty( $found ) ) {
 			$output .= ' (' . implode( ', ', $found ) . ')';
 		}
