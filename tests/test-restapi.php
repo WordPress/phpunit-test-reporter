@@ -10,8 +10,8 @@
  */
 class TestRestAPI extends WP_UnitTestCase {
 
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		global $wp_rest_server;
 		$this->server   = new WP_REST_Server;
@@ -213,8 +213,8 @@ class TestRestAPI extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 		global $wp_rest_server;
 		$wp_rest_server = null;
 	}
