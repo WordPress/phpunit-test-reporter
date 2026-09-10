@@ -2,7 +2,7 @@
 FROM wordpress:php8.1
 
 # Set up nodejs PPA
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 
 # Install server dependencies.
 RUN apt-get update && apt-get install -qq -y nodejs build-essential pkg-config libcairo2-dev libjpeg-dev libgif-dev git subversion default-mysql-client zip unzip vim libyaml-dev --fix-missing --no-install-recommends
@@ -26,6 +26,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 ENV PATH="/root/.composer/vendor/bin::${PATH}"
 
 RUN composer global require "phpunit/phpunit=8.*"
-RUN composer global require "dealerdirect/phpcodesniffer-composer-installer"
-RUN composer global require wp-coding-standards/wpcs
-RUN phpcs --config-set installed_paths /root/.composer/vendor/wp-coding-standards/wpcs
+
+# The WP test suite requires the PHPUnit Polyfills library.
+RUN composer global require "yoast/phpunit-polyfills:^1.1"
+ENV WP_TESTS_PHPUNIT_POLYFILLS_PATH="/root/.composer/vendor/yoast/phpunit-polyfills"
+RUN composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+RUN composer global require -W "squizlabs/php_codesniffer:^3.13" "dealerdirect/phpcodesniffer-composer-installer" "wp-coding-standards/wpcs:^3.1"
