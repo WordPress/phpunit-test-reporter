@@ -9,9 +9,7 @@ foreach ( $revisions as $revision ) :
 ?>
 
 <div class="ptr-test-reporter-single-revision">
-	<a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>">
-		r<?php echo $rev_id; ?>
-	</a>: <?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>
+	<a href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>">[<?php echo esc_html( $rev_id ); ?>]</a>: <?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>
 </div>
 
 <table class="ptr-test-reporter-table alignwide">
