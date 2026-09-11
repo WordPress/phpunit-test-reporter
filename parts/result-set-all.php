@@ -24,9 +24,7 @@ echo Display::get_display_css(); ?>
 				<td>
           <a
             href="<?php echo esc_url( sprintf( 'https://core.trac.wordpress.org/changeset/%d', $rev_id ) ); ?>"
-            title="<?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>">
-            r<?php echo $rev_id; ?>
-          </a>
+            title="<?php echo esc_attr( apply_filters( 'the_title', $revision->post_title ) ); ?>">[<?php echo esc_html( $rev_id ); ?>]</a>
         </td>
 
         <td>
